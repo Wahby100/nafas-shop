@@ -26,20 +26,21 @@
         body { background-color: var(--bg-dark); color: var(--text-primary); margin: 0; padding: 15px; }
         
         .header { text-align: center; padding: 20px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .shop-logo {
+            width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent-gold);
+            margin-bottom: 8px; box-shadow: 0 0 15px rgba(243, 156, 18, 0.3); object-fit: cover;
+        }
         .header h1 { color: var(--accent-gold); margin: 0; font-size: 26px; font-weight: 800; }
         .header-info { color: var(--text-secondary); font-size: 12px; margin-top: 6px; font-weight: 700; line-height: 1.6; }
 
-        /* Search & Filter Bar */
-        .filter-section {
-            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
-        }
+        .filter-section { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .filter-section input, .filter-section select {
             padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
             border-radius: 12px; color: #fff; font-size: 14px; outline: none;
         }
         .filter-section input:focus, .filter-section select:focus { border-color: var(--accent-gold); }
 
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 90px; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .product-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
         .product-card:hover { border-color: var(--accent-gold); transform: translateY(-3px); }
         .product-card h3 { font-size: 15px; margin: 8px 0; }
@@ -47,7 +48,6 @@
 
         button { background: var(--gradient-accent); border: none; color: #fff; padding: 10px 15px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 
-        /* Floating Cart Bar */
         .cart-float-bar { 
             position: fixed; bottom: 15px; left: 15px; right: 15px; 
             background: rgba(18, 24, 38, 0.95); backdrop-filter: blur(15px); 
@@ -56,7 +56,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 100; 
         }
 
-        /* Modal Checkout & Cart List */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 200; padding: 15px; }
         .modal-card { background: #131a2a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
         
@@ -70,19 +69,35 @@
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
+
+        /* ✨ شريط الحقوق والمطور Footer */
+        .developer-footer {
+            margin-top: 40px;
+            margin-bottom: 80px;
+            text-align: center;
+            padding: 15px;
+            background: rgba(19, 26, 42, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .developer-footer strong { color: var(--accent-gold); }
+        .developer-footer a { color: #fff; text-decoration: none; margin: 0 6px; }
+        .developer-footer a:hover { color: var(--accent-gold); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1> متجر نفَس | Nafas Shop</h1>
+        <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
+        <h1>محل النفَس | Nafas Shop</h1>
         <div class="header-info">
             <div>📍 بغداد - الدورة - شارع المعلمين - تحت السقيفة</div>
             <div>📞 هاتف: 07716097656 - 07706284809</div>
         </div>
     </div>
 
-    <!-- شريط البحث والفلترة -->
     <div class="filter-section">
         <input type="text" id="search-input" placeholder="🔍 ابحث عن اسم المنتج..." onkeyup="filterProducts()" style="flex: 2; min-width: 180px;">
         <select id="group-select" onchange="filterProducts()" style="flex: 1; min-width: 140px;">
@@ -90,12 +105,19 @@
         </select>
     </div>
 
-    <!-- قائمة المنتجات -->
     <div class="shop-grid" id="products-container">
         <p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">جاري تحميل المنتجات المتوفرة...</p>
     </div>
 
-    <!-- شريط السلة العائم -->
+    <!-- ✨ شريط الحقوق بالأسفل مع معلوماتك -->
+    <div class="developer-footer">
+        <div>Designed & Developed by <strong>Wahby</strong></div>
+        <div style="margin-top: 6px;">
+            <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
+            <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
+        </div>
+    </div>
+
     <div class="cart-float-bar" id="cart-float-bar" style="display: none;">
         <div>
             <span style="font-size: 12px; color: var(--text-secondary);">السلة:</span>
@@ -105,15 +127,12 @@
         <button style="width: auto; padding: 10px 20px;" onclick="openCheckoutModal()"><i class="fa-solid fa-cart-arrow-down"></i> إتمام الطلب</button>
     </div>
 
-    <!-- نافذة تأكيد الطلب والتعديل على السلة -->
     <div class="modal" id="checkout-modal">
         <div class="modal-card">
             <h2 style="color: var(--accent-gold); margin-top: 0; font-size: 18px;"><i class="fa-solid fa-cart-shopping"></i> محتويات السلة والتأكيد</h2>
             
-            <!-- قائمة تعديل عناصر السلة -->
             <div class="cart-items-list" id="cart-items-container"></div>
 
-            <!-- ملخص الفاتورة -->
             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 12px; margin-bottom: 15px; font-size: 13px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                     <span style="color: var(--text-secondary);">مجموع المواد:</span>
@@ -130,7 +149,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
@@ -162,7 +181,6 @@
     let groups = [];
     let cart = [];
 
-    // جلب المجموعات المتاحة
     db.collection("shopGroups").onSnapshot(snapshot => {
         groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const select = document.getElementById("group-select");
@@ -172,7 +190,6 @@
         });
     });
 
-    // جلب المنتجات المتوفرة فقط بالمخزن
     db.collection("inventory").onSnapshot(snapshot => {
         inventory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(i => i.qty > 0);
         filterProducts();
@@ -228,7 +245,6 @@
         updateCartBar();
     }
 
-    // زيادة الكمية داخل السلة
     function changeQty(index, delta) {
         const item = cart[index];
         const prod = inventory.find(i => i.id === item.id);
@@ -245,7 +261,6 @@
         updateCartBar();
     }
 
-    // حذف عنصر من السلة
     function removeFromCart(index) {
         cart.splice(index, 1);
         updateCartBar();
@@ -274,7 +289,6 @@
         renderCartModalItems();
     }
 
-    // عرض عناصر السلة داخل النافذة مع خيارات التعديل
     function renderCartModalItems() {
         const container = document.getElementById("cart-items-container");
         container.innerHTML = '';
