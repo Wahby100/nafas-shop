@@ -113,11 +113,11 @@
     </div>
 
     <div class="shop-grid" id="products-container">
-        <p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">جاري تحميل المنتجات المتوفرة...</p>
+        <p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">جاري تحميل المنتجات...</p>
     </div>
 
     <div class="developer-footer">
-        <div>Designed & Developed  by <strong>Wahby</strong></div>
+        <div>Designed & Developed by <strong>Wahby</strong></div>
         <div style="margin-top: 6px;">
             <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
             <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -214,9 +214,10 @@
                 name: d.name,
                 group: d.group,
                 singleSell: d.singleSell,
-                qty: d.qty
+                qty: d.qty,
+                showInShop: d.showInShop
             };
-        }).filter(i => i.qty > 0);
+        }).filter(i => i.qty > 0 && i.showInShop !== false);
         filterProducts();
     });
 
@@ -237,7 +238,7 @@
         const box = document.getElementById("products-container");
         box.innerHTML = '';
         if(itemsList.length === 0) {
-            box.innerHTML = '<p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">لا توجد منتجات مطابقة للبحث.</p>';
+            box.innerHTML = '<p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">لا توجد منتجات مطابقة للبحث حالياً.</p>';
             return;
         }
 
@@ -259,7 +260,6 @@
 
     function triggerShopFlyToCart(e, itemId) {
         const card = document.getElementById(`shop-card-${itemId}`);
-        const cartBar = document.getElementById('cart-float-bar');
         if(!card) return;
 
         const cardRect = card.getBoundingClientRect();
