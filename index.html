@@ -27,6 +27,7 @@
             --text-secondary: #94a3b8;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --border-glass: rgba(255, 255, 255, 0.08);
             --border-glow: rgba(243, 156, 18, 0.4);
         }
@@ -43,7 +44,7 @@
             color: var(--text-primary); margin: 0; padding: 12px; min-height: 100vh;
         }
 
-        /* Animations */
+        /* Keyframe Animations */
         @keyframes floatLogo {
             0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 15px rgba(243, 156, 18, 0.4)); }
             50% { transform: translateY(-6px) scale(1.02); filter: drop-shadow(0 0 25px rgba(243, 156, 18, 0.7)); }
@@ -52,6 +53,11 @@
         @keyframes pulseCart {
             0%, 100% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.5); }
             50% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.9); }
+        }
+
+        @keyframes pulseWarningBadge {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 16px rgba(239, 68, 68, 0.9); }
         }
 
         /* Header Hero Section */
@@ -173,6 +179,27 @@
         }
 
         .product-card:hover::before { opacity: 1; }
+
+        /* Dynamic Visual Badges */
+        .status-badge-dynamic {
+            position: absolute; top: 10px; left: 10px;
+            padding: 3px 9px; border-radius: 12px; font-size: 9.5px;
+            font-weight: 800; display: inline-flex; align-items: center; gap: 4px;
+            z-index: 2;
+        }
+        .badge-limited {
+            background: rgba(239, 68, 68, 0.25); color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            animation: pulseWarningBadge 2s infinite;
+        }
+        .badge-hot {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(239, 68, 68, 0.3) 100%);
+            color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.6);
+        }
+        .badge-new {
+            background: rgba(0, 242, 254, 0.2); color: #00f2fe;
+            border: 1px solid rgba(0, 242, 254, 0.5);
+        }
 
         .group-tag {
             font-size: 10px; font-weight: 800; color: var(--accent-gold);
@@ -343,7 +370,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="ادخل الاسم الكامل"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
@@ -357,6 +384,87 @@
     </div>
 
 <script>
+    /* ============================================================
+       Interactive Web Audio API Sound System
+       ============================================================ */
+    let audioCtx = null;
+
+    function getAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function playBeepSound() {
+        try {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.08);
+
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.08);
+        } catch (e) {}
+    }
+
+    function playSuccessSound() {
+        try {
+            const ctx = getAudioContext();
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const startTime = ctx.currentTime + (i * 0.08);
+
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                gain.gain.setValueAtTime(0.3, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.25);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(startTime);
+                osc.stop(startTime + 0.25);
+            });
+        } catch (e) {}
+    }
+
+    function playRemoveSound() {
+        try {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(440, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.1);
+
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+        } catch (e) {}
+    }
+
     function escapeHTML(str) {
         if (!str) return '';
         return String(str)
@@ -400,6 +508,7 @@
     }
 
     function selectCategory(groupName, btn) {
+        playBeepSound();
         selectedGroupFilter = groupName;
         document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
@@ -441,11 +550,21 @@
             return;
         }
 
-        itemsList.forEach(p => {
+        itemsList.forEach((p, idx) => {
+            let dynamicBadgeHTML = '';
+            if (p.qty <= 3) {
+                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-limited"><i class="fa-solid fa-triangle-exclamation"></i> كمية محدودة (${p.qty})</span>`;
+            } else if (idx === 0 || p.qty > 50) {
+                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-hot"><i class="fa-solid fa-fire-flame-curved"></i> الأكثر طلباً 🔥</span>`;
+            } else if (idx % 3 === 0) {
+                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-new"><i class="fa-solid fa-wand-magic-sparkles"></i> جديد ✨</span>`;
+            }
+
             box.innerHTML += `
                 <div class="product-card" id="shop-card-${p.id}">
+                    ${dynamicBadgeHTML}
                     <div>
-                        <span class="group-tag">${escapeHTML(p.group)}</span>
+                        <span class="group-tag" style="margin-top: ${dynamicBadgeHTML ? '16px' : '0'}">${escapeHTML(p.group)}</span>
                         <h3>${escapeHTML(p.name)}</h3>
                     </div>
                     <div>
@@ -458,6 +577,7 @@
     }
 
     function triggerShopFlyToCart(e, itemId) {
+        playBeepSound();
         const card = document.getElementById(`shop-card-${itemId}`);
         if(!card) return;
 
@@ -495,6 +615,7 @@
     }
 
     function changeQty(index, delta) {
+        playBeepSound();
         const item = cart[index];
         const prod = inventory.find(i => i.id === item.id);
         
@@ -511,6 +632,7 @@
     }
 
     function removeFromCart(index) {
+        playRemoveSound();
         cart.splice(index, 1);
         updateCartBar();
     }
@@ -561,6 +683,7 @@
     }
 
     function openCheckoutModal() { 
+        playBeepSound();
         if(cart.length === 0) return;
         renderCartModalItems();
         document.getElementById("checkout-modal").style.display = "flex"; 
@@ -596,6 +719,7 @@
             date: dateStr,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
+            playSuccessSound();
             alert("✅ تم إرسال طلبك بنجاح! سيتواصل معك الكاشير لتأكيد التوصيل.");
             cart = [];
             updateCartBar();
