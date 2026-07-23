@@ -213,8 +213,14 @@
         }
 
         .price-box {
-            color: var(--success); font-weight: 900; font-size: 17px; margin-bottom: 12px;
+            color: var(--success); font-weight: 900; font-size: 16px; margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .weight-select {
+            width: 100%; padding: 6px 10px; background: rgba(0,0,0,0.5);
+            border: 1px solid var(--accent-gold); border-radius: 10px; color: #fff;
+            font-size: 12px; font-weight: 700; margin-bottom: 10px; outline: none;
         }
 
         .add-to-cart-btn {
@@ -304,7 +310,7 @@
         <div class="hero-badges-row">
             <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لباب البيت</span>
             <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> منتجات أصلية 100%</span>
-            <span class="hero-badge"><i class="fa-solid fa-hand-holding-dollar"></i> الدفع عند الاستلام</span>
+            <span class="hero-badge"><i class="fa-solid fa-scale-balanced"></i> متوفر بيع بالقطع والغرامات الكيلو</span>
         </div>
 
         <div class="header-info-box">
@@ -370,7 +376,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
@@ -524,6 +530,7 @@
                 group: d.group,
                 singleSell: d.singleSell,
                 qty: d.qty,
+                unitType: d.unitType || 'piece',
                 showInShop: d.showInShop
             };
         }).filter(i => i.qty > 0 && i.showInShop !== false);
@@ -553,22 +560,38 @@
         itemsList.forEach((p, idx) => {
             let dynamicBadgeHTML = '';
             if (p.qty <= 3) {
-                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-limited"><i class="fa-solid fa-triangle-exclamation"></i> كمية محدودة (${p.qty})</span>`;
+                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-limited"><i class="fa-solid fa-triangle-exclamation"></i> كمية محدودة</span>`;
             } else if (idx === 0 || p.qty > 50) {
                 dynamicBadgeHTML = `<span class="status-badge-dynamic badge-hot"><i class="fa-solid fa-fire-flame-curved"></i> الأكثر طلباً 🔥</span>`;
             } else if (idx % 3 === 0) {
                 dynamicBadgeHTML = `<span class="status-badge-dynamic badge-new"><i class="fa-solid fa-wand-magic-sparkles"></i> جديد ✨</span>`;
             }
 
+            const isKg = p.unitType === 'kg';
+            const priceLabel = isKg ? `${(p.singleSell || 0).toLocaleString()} د.ع / كجم` : `${(p.singleSell || 0).toLocaleString()} د.ع`;
+
+            let weightSelectorHTML = '';
+            if (isKg) {
+                weightSelectorHTML = `
+                    <select class="weight-select" id="weight-sel-${p.id}">
+                        <option value="0.25">250 غرام (ربع كيلو)</option>
+                        <option value="0.5" selected>500 غرام (نصف كيلو)</option>
+                        <option value="1">1 كيلوغرام (كيلو كامل)</option>
+                        <option value="2">2 كيلوغرام</option>
+                    </select>
+                `;
+            }
+
             box.innerHTML += `
                 <div class="product-card" id="shop-card-${p.id}">
                     ${dynamicBadgeHTML}
                     <div>
-                        <span class="group-tag" style="margin-top: ${dynamicBadgeHTML ? '16px' : '0'}">${escapeHTML(p.group)}</span>
+                        <span class="group-tag" style="margin-top: ${dynamicBadgeHTML ? '16px' : '0'}">${escapeHTML(p.group)} ${isKg ? '⚖️' : ''}</span>
                         <h3>${escapeHTML(p.name)}</h3>
                     </div>
                     <div>
-                        <div class="price-box">${(p.singleSell || 0).toLocaleString()} د.ع</div>
+                        <div class="price-box">${priceLabel}</div>
+                        ${weightSelectorHTML}
                         <button class="add-to-cart-btn" onclick="triggerShopFlyToCart(event, '${p.id}'); addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> إضافة للسلة</button>
                     </div>
                 </div>
@@ -604,12 +627,31 @@
     function addToCart(id) {
         const prod = inventory.find(i => i.id === id);
         if(!prod) return;
-        const item = cart.find(c => c.id === id);
+
+        let amount = 1;
+        let unitText = "قطعة";
+
+        if(prod.unitType === 'kg') {
+            const weightSel = document.getElementById(`weight-sel-${id}`);
+            amount = weightSel ? parseFloat(weightSel.value) : 1;
+            unitText = amount >= 1 ? `${amount} كجم` : `${amount * 1000} غرام`;
+        }
+
+        const item = cart.find(c => c.id === id && c.amount === amount);
         if(item) {
-            if(item.qty + 1 > prod.qty) { alert("تم الوصول للكمية القصوى المتوفرة بالمخزن!"); return; }
-            item.qty++;
+            item.qty += 1;
         } else {
-            cart.push({ id: prod.id, name: prod.name, price: prod.singleSell, group: prod.group, qty: 1 });
+            const itemPrice = Math.round(prod.singleSell * amount);
+            cart.push({
+                id: prod.id,
+                name: prod.unitType === 'kg' ? `${prod.name} (${unitText})` : prod.name,
+                price: itemPrice,
+                unitPriceKg: prod.singleSell,
+                unitType: prod.unitType,
+                amount: amount,
+                group: prod.group,
+                qty: 1
+            });
         }
         updateCartBar();
     }
@@ -617,13 +659,6 @@
     function changeQty(index, delta) {
         playBeepSound();
         const item = cart[index];
-        const prod = inventory.find(i => i.id === item.id);
-        
-        if (delta > 0 && prod && item.qty + delta > prod.qty) {
-            alert("تم الوصول للكمية القصوى المتوفرة بالمخزن!");
-            return;
-        }
-        
         item.qty += delta;
         if (item.qty <= 0) {
             cart.splice(index, 1);
