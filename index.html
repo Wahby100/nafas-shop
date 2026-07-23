@@ -23,12 +23,18 @@
         }
 
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: all 0.25s ease; }
-        body { background-color: var(--bg-dark); color: var(--text-primary); margin: 0; padding: 15px; }
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(243, 156, 18, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
+            color: var(--text-primary); margin: 0; padding: 15px; min-height: 100vh;
+        }
         
         .header { text-align: center; padding: 20px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
         .shop-logo {
-            width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent-gold);
-            margin-bottom: 8px; box-shadow: 0 0 15px rgba(243, 156, 18, 0.3); object-fit: cover;
+            width: 85px; height: 85px; border-radius: 50%; border: 2px solid var(--accent-gold);
+            margin-bottom: 8px; box-shadow: 0 0 20px rgba(243, 156, 18, 0.35); object-fit: cover;
         }
         .header h1 { color: var(--accent-gold); margin: 0; font-size: 26px; font-weight: 800; }
         .header-info { color: var(--text-secondary); font-size: 12px; margin-top: 6px; font-weight: 700; line-height: 1.6; }
@@ -38,15 +44,16 @@
             padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
             border-radius: 12px; color: #fff; font-size: 14px; outline: none;
         }
-        .filter-section input:focus, .filter-section select:focus { border-color: var(--accent-gold); }
+        .filter-section input:focus, .filter-section select:focus { border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(243, 156, 18, 0.3); }
 
         .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .product-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-card:hover { border-color: var(--accent-gold); transform: translateY(-3px); }
+        .product-card { background: var(--bg-card); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card:hover { border-color: var(--accent-gold); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(243, 156, 18, 0.2); }
         .product-card h3 { font-size: 15px; margin: 8px 0; }
         .product-card .price { color: var(--success); font-weight: 800; font-size: 16px; margin-bottom: 10px; }
 
         button { background: var(--gradient-accent); border: none; color: #fff; padding: 10px 15px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        button:active { transform: scale(0.96); }
 
         .cart-float-bar { 
             position: fixed; bottom: 15px; left: 15px; right: 15px; 
@@ -78,6 +85,13 @@
         .developer-footer strong { color: var(--accent-gold); }
         .developer-footer a { color: #fff; text-decoration: none; margin: 0 6px; }
         .developer-footer a:hover { color: var(--accent-gold); }
+
+        .fly-particle {
+            position: fixed; z-index: 9999; pointer-events: none;
+            width: 35px; height: 35px; background: var(--accent-gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px;
+            box-shadow: 0 0 20px var(--accent-gold); transition: all 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+        }
     </style>
 </head>
 <body>
@@ -103,7 +117,7 @@
     </div>
 
     <div class="developer-footer">
-        <div>Designed & Developed by <strong>Wahby</strong></div>
+        <div>Designed & Developed  by <strong>Wahby</strong></div>
         <div style="margin-top: 6px;">
             <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
             <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -141,7 +155,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="ادخل الاسم الكامل"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
@@ -192,7 +206,6 @@
         });
     });
 
-    // حماية التكلفة: حجب أسعار الشراء فور استلام الداتا من الفايربيس
     db.collection("inventory").onSnapshot(snapshot => {
         inventory = snapshot.docs.map(doc => {
             const d = doc.data();
@@ -230,18 +243,43 @@
 
         itemsList.forEach(p => {
             box.innerHTML += `
-                <div class="product-card">
+                <div class="product-card" id="shop-card-${p.id}">
                     <div>
                         <small style="color:var(--accent-gold); font-size:10px;">${escapeHTML(p.group)}</small>
                         <h3>${escapeHTML(p.name)}</h3>
                     </div>
                     <div>
                         <div class="price">${(p.singleSell || 0).toLocaleString()} د.ع</div>
-                        <button onclick="addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> إضافة للسلة</button>
+                        <button onclick="triggerShopFlyToCart(event, '${p.id}'); addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> إضافة للسلة</button>
                     </div>
                 </div>
             `;
         });
+    }
+
+    function triggerShopFlyToCart(e, itemId) {
+        const card = document.getElementById(`shop-card-${itemId}`);
+        const cartBar = document.getElementById('cart-float-bar');
+        if(!card) return;
+
+        const cardRect = card.getBoundingClientRect();
+
+        const particle = document.createElement('div');
+        particle.className = 'fly-particle';
+        particle.innerHTML = '<i class="fa-solid fa-cart-plus"></i>';
+        particle.style.left = `${cardRect.left + cardRect.width / 2}px`;
+        particle.style.top = `${cardRect.top + cardRect.height / 2}px`;
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+            particle.style.left = `${window.innerWidth / 2}px`;
+            particle.style.top = `${window.innerHeight - 30}px`;
+            particle.style.opacity = '0.2';
+            particle.style.transform = 'scale(0.3)';
+        }, 20);
+
+        setTimeout(() => { particle.remove(); }, 750);
     }
 
     function addToCart(id) {
