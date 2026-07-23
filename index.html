@@ -16,6 +16,7 @@
             --bg-card: rgba(19, 26, 42, 0.75);
             --accent-gold: #f39c12;
             --gradient-accent: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            --gradient-whatsapp: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --success: #10b981;
@@ -70,17 +71,10 @@
         .form-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
 
-        /* ✨ شريط الحقوق والمطور Footer */
         .developer-footer {
-            margin-top: 40px;
-            margin-bottom: 80px;
-            text-align: center;
-            padding: 15px;
-            background: rgba(19, 26, 42, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            font-size: 12px;
-            color: var(--text-secondary);
+            margin-top: 40px; margin-bottom: 80px; text-align: center; padding: 15px;
+            background: rgba(19, 26, 42, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px; font-size: 12px; color: var(--text-secondary);
         }
         .developer-footer strong { color: var(--accent-gold); }
         .developer-footer a { color: #fff; text-decoration: none; margin: 0 6px; }
@@ -109,7 +103,6 @@
         <p style="text-align: center; grid-column: span 2; color: var(--text-secondary);">جاري تحميل المنتجات المتوفرة...</p>
     </div>
 
-    <!-- ✨ شريط الحقوق بالأسفل مع معلوماتك -->
     <div class="developer-footer">
         <div>Designed & Developed by <strong>Wahby</strong></div>
         <div style="margin-top: 6px;">
@@ -149,20 +142,31 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="ادخل الاسم الكامل"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
                 
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button type="submit" style="flex: 2;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب الآن</button>
-                    <button type="button" onclick="closeCheckoutModal()" style="flex: 1; background: rgba(255,255,255,0.1);">إلغاء</button>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+                    <button type="submit" style="flex: 1;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب المباشر للمحل</button>
+                    <button type="button" onclick="sendOrderViaWhatsApp()" style="background: var(--gradient-whatsapp);"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب عبر الواتساب</button>
+                    <button type="button" onclick="closeCheckoutModal()" style="background: rgba(255,255,255,0.1);">إلغاء</button>
                 </div>
             </form>
         </div>
     </div>
 
 <script>
+    function escapeHTML(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     const firebaseConfig = {
         apiKey: "AIzaSyBS81_1q4M00brOhTxSTZEkX9aXnwpjo7Q",
         authDomain: "nafas-system-6d5a7.firebaseapp.com",
@@ -186,12 +190,22 @@
         const select = document.getElementById("group-select");
         select.innerHTML = '<option value="">جميع المجموعات</option>';
         groups.forEach(g => {
-            select.innerHTML += `<option value="${g.name}">${g.name}</option>`;
+            select.innerHTML += `<option value="${escapeHTML(g.name)}">${escapeHTML(g.name)}</option>`;
         });
     });
 
+    // حماية التكلفة: حجب أسعار الشراء فور استلام الداتا من الفايربيس
     db.collection("inventory").onSnapshot(snapshot => {
-        inventory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(i => i.qty > 0);
+        inventory = snapshot.docs.map(doc => {
+            const d = doc.data();
+            return {
+                id: doc.id,
+                name: d.name,
+                group: d.group,
+                singleSell: d.singleSell,
+                qty: d.qty
+            };
+        }).filter(i => i.qty > 0);
         filterProducts();
     });
 
@@ -220,8 +234,8 @@
             box.innerHTML += `
                 <div class="product-card">
                     <div>
-                        <small style="color:var(--accent-gold); font-size:10px;">${p.group}</small>
-                        <h3>${p.name}</h3>
+                        <small style="color:var(--accent-gold); font-size:10px;">${escapeHTML(p.group)}</small>
+                        <h3>${escapeHTML(p.name)}</h3>
                     </div>
                     <div>
                         <div class="price">${(p.singleSell || 0).toLocaleString()} د.ع</div>
@@ -240,7 +254,7 @@
             if(item.qty + 1 > prod.qty) { alert("تم الوصول للكمية القصوى المتوفرة بالمخزن!"); return; }
             item.qty++;
         } else {
-            cart.push({ id: prod.id, name: prod.name, price: prod.singleSell, costPrice: prod.singleCost, group: prod.group, qty: 1 });
+            cart.push({ id: prod.id, name: prod.name, price: prod.singleSell, group: prod.group, qty: 1 });
         }
         updateCartBar();
     }
@@ -297,7 +311,7 @@
             container.innerHTML += `
                 <div class="cart-item-row">
                     <div style="flex: 1;">
-                        <div style="font-size: 13px; font-weight: 700;">${item.name}</div>
+                        <div style="font-size: 13px; font-weight: 700;">${escapeHTML(item.name)}</div>
                         <small style="color: var(--text-secondary);">${(item.price * item.qty).toLocaleString()} د.ع</small>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -356,6 +370,41 @@
             alert("حدث خطأ أثناء إرسال الطلب: " + err.message);
         });
     });
+
+    // ميزة الإرسال المباشر عبر الواتساب
+    function sendOrderViaWhatsApp() {
+        if(cart.length === 0) return;
+        const name = document.getElementById("cust-name").value.trim();
+        const phone = document.getElementById("cust-phone").value.trim();
+        const address = document.getElementById("cust-address").value.trim();
+        const notes = document.getElementById("cust-notes").value.trim();
+
+        if(!name || !phone || !address) {
+            alert("يرجى ملء حقول الاسم والهاتف والعنوان أولاً!");
+            return;
+        }
+
+        let itemsTotal = 0;
+        let itemsText = cart.map(i => {
+            itemsTotal += (i.qty * i.price);
+            return `• ${i.name} (عدد ${i.qty}) بسعر ${(i.qty * i.price).toLocaleString()} د.ع`;
+        }).join("\n");
+
+        const finalTotal = itemsTotal + DELIVERY_FEE;
+
+        let msg = `*طلب جديد من متجر النفَس الإلكتروني* 🛍️\n\n`;
+        msg += `👤 *الزبون:* ${name}\n`;
+        msg += `📞 *الهاتف:* ${phone}\n`;
+        msg += `📍 *العنوان:* ${address}\n`;
+        if(notes) msg += `📝 *ملاحظات:* ${notes}\n`;
+        msg += `\n📦 *المواد المطلوبة:*\n${itemsText}\n\n`;
+        msg += `💰 *مجموع المواد:* ${itemsTotal.toLocaleString()} د.ع\n`;
+        msg += `🚚 *أجور التوصيل:* ${DELIVERY_FEE.toLocaleString()} د.ع\n`;
+        msg += `✨ *المجموع النهائي:* ${finalTotal.toLocaleString()} د.ع`;
+
+        const waUrl = `https://wa.me/9647811880089?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+    }
 </script>
 </body>
 </html>
