@@ -16,7 +16,6 @@
             --bg-card: rgba(19, 26, 42, 0.75);
             --accent-gold: #f39c12;
             --gradient-accent: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            --gradient-whatsapp: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --success: #10b981;
@@ -85,7 +84,7 @@
 
     <div class="header">
         <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-        <h1>محل النفَس | Nafas Shop</h1>
+        <h1>متجر نفَس | Nafas Shop</h1>
         <div class="header-info">
             <div>📍 بغداد - الدورة - شارع المعلمين - تحت السقيفة</div>
             <div>📞 هاتف: 07716097656 - 07706284809</div>
@@ -104,7 +103,7 @@
     </div>
 
     <div class="developer-footer">
-        <div>Designed & Developed with ❤️ by <strong>Wahby</strong></div>
+        <div>Designed & Developed by <strong>Wahby</strong></div>
         <div style="margin-top: 6px;">
             <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
             <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -142,15 +141,14 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
                 
-                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
-                    <button type="submit" style="flex: 1;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب المباشر للمحل</button>
-                    <button type="button" onclick="sendOrderViaWhatsApp()" style="background: var(--gradient-whatsapp);"><i class="fa-brands fa-whatsapp"></i> إرسال الطلب عبر الواتساب</button>
-                    <button type="button" onclick="closeCheckoutModal()" style="background: rgba(255,255,255,0.1);">إلغاء</button>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button type="submit" style="flex: 2;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب الآن</button>
+                    <button type="button" onclick="closeCheckoutModal()" style="flex: 1; background: rgba(255,255,255,0.1);">إلغاء</button>
                 </div>
             </form>
         </div>
@@ -370,41 +368,6 @@
             alert("حدث خطأ أثناء إرسال الطلب: " + err.message);
         });
     });
-
-    // ميزة الإرسال المباشر عبر الواتساب
-    function sendOrderViaWhatsApp() {
-        if(cart.length === 0) return;
-        const name = document.getElementById("cust-name").value.trim();
-        const phone = document.getElementById("cust-phone").value.trim();
-        const address = document.getElementById("cust-address").value.trim();
-        const notes = document.getElementById("cust-notes").value.trim();
-
-        if(!name || !phone || !address) {
-            alert("يرجى ملء حقول الاسم والهاتف والعنوان أولاً!");
-            return;
-        }
-
-        let itemsTotal = 0;
-        let itemsText = cart.map(i => {
-            itemsTotal += (i.qty * i.price);
-            return `• ${i.name} (عدد ${i.qty}) بسعر ${(i.qty * i.price).toLocaleString()} د.ع`;
-        }).join("\n");
-
-        const finalTotal = itemsTotal + DELIVERY_FEE;
-
-        let msg = `*طلب جديد من متجر نفَس الإلكتروني* 🛍️\n\n`;
-        msg += `👤 *الزبون:* ${name}\n`;
-        msg += `📞 *الهاتف:* ${phone}\n`;
-        msg += `📍 *العنوان:* ${address}\n`;
-        if(notes) msg += `📝 *ملاحظات:* ${notes}\n`;
-        msg += `\n📦 *المواد المطلوبة:*\n${itemsText}\n\n`;
-        msg += `💰 *مجموع المواد:* ${itemsTotal.toLocaleString()} د.ع\n`;
-        msg += `🚚 *أجور التوصيل:* ${DELIVERY_FEE.toLocaleString()} د.ع\n`;
-        msg += `✨ *المجموع النهائي:* ${finalTotal.toLocaleString()} د.ع`;
-
-        const waUrl = `https://wa.me/9647811880089?text=${encodeURIComponent(msg)}`;
-        window.open(waUrl, '_blank');
-    }
 </script>
 </body>
 </html>
