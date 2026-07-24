@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر نفَس الإلكتروني | Nafas Shop (v1.2)</title>
+    <title>متجر نفَس الإلكتروني | Nafas Shop (v1.3)</title>
     <!-- خطوط جوجل العالمية -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <!-- أيقونات FontAwesome 6 -->
@@ -42,7 +42,15 @@
                 radial-gradient(at 50% 50%, rgba(147, 51, 234, 0.05) 0px, transparent 60%);
             background-attachment: fixed;
             color: var(--text-primary); margin: 0; padding: 12px; min-height: 100vh;
+            overflow-x: hidden; position: relative;
         }
+
+        /* Background Animated Particles Canvas */
+        #particles-canvas {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        }
+
+        .content-relative { position: relative; z-index: 1; }
 
         .version-badge {
             background: rgba(243, 156, 18, 0.15); border: 1px solid var(--accent-gold);
@@ -56,9 +64,15 @@
             50% { transform: translateY(-6px) scale(1.02); filter: drop-shadow(0 0 25px rgba(243, 156, 18, 0.7)); }
         }
 
-        @keyframes pulseCart {
-            0%, 100% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.9); }
+        @keyframes pulseCart3D {
+            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 15px 35px rgba(243, 156, 18, 0.4); }
+            50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 25px 45px rgba(243, 156, 18, 0.7); }
+        }
+
+        @keyframes rotateStar {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         @keyframes pulseWarningBadge {
@@ -160,9 +174,10 @@
         /* Products Grid */
         .shop-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-            gap: 16px; margin-bottom: 40px;
+            gap: 16px; margin-bottom: 40px; perspective: 1000px;
         }
 
+        /* 3D Holographic Tilt Card */
         .product-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -170,6 +185,7 @@
             border-radius: 22px; padding: 16px; text-align: center;
             display: flex; flex-direction: column; justify-content: space-between;
             position: relative; overflow: hidden;
+            transform-style: preserve-3d; transition: transform 0.15s ease-out, box-shadow 0.3s ease;
         }
 
         .product-card::before {
@@ -177,13 +193,18 @@
             background: var(--gradient-gold); opacity: 0; transition: opacity 0.3s ease;
         }
 
-        .product-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-glow);
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 35px -10px rgba(243, 156, 18, 0.3);
+        /* Holographic Overlay */
+        .product-card .holo-shine {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
         }
 
+        .product-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 20px 40px -10px rgba(243, 156, 18, 0.4);
+        }
+        .product-card:hover .holo-shine { opacity: 1; }
         .product-card:hover::before { opacity: 1; }
 
         /* Dynamic Visual Badges */
@@ -237,23 +258,34 @@
         }
         .add-to-cart-btn:active { transform: scale(0.95); }
 
-        /* Floating Cart Bar */
+        /* 3D Glowing Floating Cart Bar Dock */
         .cart-float-bar {
             position: fixed; bottom: 20px; left: 20px; right: 20px;
-            background: rgba(15, 21, 35, 0.95); backdrop-filter: blur(20px);
-            border: 1px solid var(--accent-gold); border-radius: 22px; padding: 14px 22px;
+            background: rgba(15, 21, 35, 0.92); backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid var(--accent-gold); border-radius: 26px; padding: 14px 22px;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; animation: pulseCart 3s infinite;
+            z-index: 100; animation: pulseCart3D 3.5s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        .star-badge-3d {
+            background: var(--gradient-gold); color: #fff;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 900; margin-left: 6px;
+            box-shadow: 0 0 12px var(--accent-gold); animation: rotateStar 8s linear infinite;
         }
 
         .cart-float-info { display: flex; flex-direction: column; }
-        .cart-float-count { font-size: 12px; color: var(--text-secondary); font-weight: 700; }
-        .cart-float-total { font-weight: 900; color: #fff; font-size: 15px; margin-top: 2px; }
+        .cart-float-count { font-size: 12px; color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; }
+        .cart-float-total { font-weight: 900; color: #fff; font-size: 15.5px; margin-top: 2px; text-shadow: 0 0 10px rgba(243,156,18,0.5); }
 
         .checkout-trigger-btn {
             background: var(--gradient-gold); border: none; color: #fff;
             padding: 12px 22px; border-radius: 14px; font-weight: 800; font-size: 14px;
             cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
         }
 
         /* Modal Styles */
@@ -308,55 +340,63 @@
 </head>
 <body>
 
-    <!-- Hero Header -->
-    <div class="hero-header">
-        <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-        <h1>متجر نفَس الإلكتروني <span class="version-badge">v1.2</span></h1>
-        
-        <div class="hero-badges-row">
-            <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لباب البيت</span>
-            <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> منتجات أصلية 100%</span>
-            <span class="hero-badge"><i class="fa-solid fa-scale-balanced"></i> متوفر بيع بالقطع والغرامات الكيلو</span>
+    <!-- Animated Particles Background Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="content-relative">
+        <!-- Hero Header -->
+        <div class="hero-header">
+            <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
+            <h1>متجر نفَس الإلكتروني <span class="version-badge">v1.3</span></h1>
+            
+            <div class="hero-badges-row">
+                <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لباب البيت</span>
+                <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> منتجات أصلية 100%</span>
+                <span class="hero-badge"><i class="fa-solid fa-scale-balanced"></i> متوفر بيع بالقطع والغرامات الكيلو</span>
+            </div>
+
+            <div class="header-info-box">
+                <div>📍 بغداد - الدورة - شارع المعلمين - تحت السقيفة</div>
+                <div>📞 للطلب والاستفسار: 07716097656 - 07706284809</div>
+            </div>
         </div>
 
-        <div class="header-info-box">
-            <div>📍 بغداد - الدورة - شارع المعلمين - تحت السقيفة</div>
-            <div>📞 للطلب والاستفسار: 07716097656 - 07706284809</div>
+        <!-- Search Section -->
+        <div class="search-bar-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="search-input" placeholder="ابحث عن اسم المنتج أو المادة..." onkeyup="filterProducts()">
         </div>
-    </div>
 
-    <!-- Search Section -->
-    <div class="search-bar-wrapper">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="search-input" placeholder="ابحث عن اسم المنتج أو المادة..." onkeyup="filterProducts()">
-    </div>
-
-    <!-- Category Filter Pills -->
-    <div class="categories-container" id="categories-pills-box">
-        <button class="cat-pill active" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع المجموعات</button>
-    </div>
-
-    <!-- Products Grid -->
-    <div class="shop-grid" id="products-container">
-        <p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding: 30px;">جاري تحميل منتجات متجر نفَس...</p>
-    </div>
-
-    <!-- Developer Footer -->
-    <div class="developer-footer">
-        <div>Designed & Developed  by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.2</span></div>
-        <div style="margin-top: 8px;">
-            <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
-            <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
+        <!-- Category Filter Pills -->
+        <div class="categories-container" id="categories-pills-box">
+            <button class="cat-pill active" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع المجموعات</button>
         </div>
-    </div>
 
-    <!-- Floating Cart Bar -->
-    <div class="cart-float-bar" id="cart-float-bar" style="display: none;">
-        <div class="cart-float-info">
-            <span class="cart-float-count" id="cart-count">0 مواد بالسلة</span>
-            <span class="cart-float-total" id="cart-total">0 د.ع</span>
+        <!-- Products Grid -->
+        <div class="shop-grid" id="products-container">
+            <p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding: 30px;">جاري تحميل منتجات متجر نفَس...</p>
         </div>
-        <button class="checkout-trigger-btn" onclick="openCheckoutModal()"><i class="fa-solid fa-cart-arrow-down"></i> إتمام الطلب الآن</button>
+
+        <!-- Developer Footer -->
+        <div class="developer-footer">
+            <div>Designed & Developed by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.3</span></div>
+            <div style="margin-top: 8px;">
+                <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
+                <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
+            </div>
+        </div>
+
+        <!-- 3D Glowing Floating Cart Bar Dock -->
+        <div class="cart-float-bar" id="cart-float-bar" style="display: none;">
+            <div class="cart-float-info">
+                <span class="cart-float-count" id="cart-count">
+                    <span class="star-badge-3d"><i class="fa-solid fa-star"></i></span>
+                    0 مواد بالسلة
+                </span>
+                <span class="cart-float-total" id="cart-total">0 د.ع</span>
+            </div>
+            <button class="checkout-trigger-btn" onclick="openCheckoutModal()"><i class="fa-solid fa-cart-arrow-down"></i> إتمام الطلب الآن</button>
+        </div>
     </div>
 
     <!-- Checkout Modal -->
@@ -396,6 +436,89 @@
     </div>
 
 <script>
+    /* ============================================================
+       Interactive Animated Canvas Particles Background
+       ============================================================ */
+    const canvas = document.getElementById("particles-canvas");
+    const ctx = canvas.getContext("2d");
+    let particlesArray = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2.5 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.4;
+            this.speedY = (Math.random() - 0.5) * 0.4;
+            this.alpha = Math.random() * 0.6 + 0.2;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.fillStyle = "#f39c12";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function initParticles() {
+        particlesArray = [];
+        const count = Math.min(Math.floor(window.innerWidth / 20), 45);
+        for (let i = 0; i < count; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+    initParticles();
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particlesArray.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ============================================================
+       3D Holographic Tilt Card Mouse Event Handlers
+       ============================================================ */
+    function apply3DTiltToCards() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -12;
+                const rotateY = ((x - centerX) / centerX) * 12;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+    }
+
     /* ============================================================
        Interactive Web Audio API Sound System
        ============================================================ */
@@ -590,6 +713,7 @@
 
             box.innerHTML += `
                 <div class="product-card" id="shop-card-${p.id}">
+                    <div class="holo-shine"></div>
                     ${dynamicBadgeHTML}
                     <div>
                         <span class="group-tag" style="margin-top: ${dynamicBadgeHTML ? '16px' : '0'}">${escapeHTML(p.group)} ${isKg ? '⚖️' : ''}</span>
@@ -603,6 +727,8 @@
                 </div>
             `;
         });
+
+        apply3DTiltToCards();
     }
 
     function triggerShopFlyToCart(e, itemId) {
@@ -692,7 +818,7 @@
         
         const finalTotal = itemsTotal + DELIVERY_FEE;
 
-        document.getElementById("cart-count").innerText = `${count} مواد بالسلة`;
+        document.getElementById("cart-count").innerHTML = `<span class="star-badge-3d"><i class="fa-solid fa-star"></i></span> ${count} مواد بالسلة`;
         document.getElementById("cart-total").innerText = `المجموع: ${finalTotal.toLocaleString()} د.ع (شامل التوصيل)`;
         
         document.getElementById("summary-items-total").innerText = `${itemsTotal.toLocaleString()} د.ع`;
