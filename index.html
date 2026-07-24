@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر نفَس للسكائر والأراجيل والمعسل | Nafas Shop (v1.8)</title>
+    <title>متجر نفَس الملكي للسكائر والأراجيل | Nafas Luxury Shop (v1.9)</title>
     <!-- خطوط جوجل العالمية -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <!-- أيقونات FontAwesome 6 -->
@@ -15,9 +15,9 @@
 
     <style>
         :root {
-            --bg-dark: #04060b;
-            --bg-card: rgba(12, 17, 28, 0.85);
-            --bg-card-hover: rgba(22, 31, 50, 0.95);
+            --bg-dark: #030509;
+            --bg-card: rgba(10, 15, 26, 0.88);
+            --bg-card-hover: rgba(20, 28, 46, 0.96);
             --accent-gold: #f39c12;
             --accent-amber: #e67e22;
             --accent-ember: #ff5722;
@@ -25,14 +25,14 @@
             --accent-purple: #a855f7;
             --gradient-gold: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
             --gradient-ember: linear-gradient(135deg, #ff5722 0%, #f39c12 100%);
-            --gradient-glow: radial-gradient(circle at center, rgba(243, 156, 18, 0.22) 0%, transparent 70%);
+            --gradient-glow: radial-gradient(circle at center, rgba(243, 156, 18, 0.25) 0%, transparent 75%);
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
             --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(243, 156, 18, 0.5);
+            --border-glow: rgba(243, 156, 18, 0.55);
         }
 
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -40,15 +40,15 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(243, 156, 18, 0.18) 0px, transparent 45%),
-                radial-gradient(at 100% 100%, rgba(255, 87, 34, 0.12) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(0, 242, 254, 0.04) 0px, transparent 60%);
+                radial-gradient(at 0% 0%, rgba(243, 156, 18, 0.2) 0px, transparent 45%),
+                radial-gradient(at 100% 100%, rgba(255, 87, 34, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(0, 242, 254, 0.05) 0px, transparent 60%);
             background-attachment: fixed;
             color: var(--text-primary); margin: 0; padding: 12px; min-height: 100vh;
             overflow-x: hidden; position: relative; padding-bottom: 90px;
         }
 
-        /* 1. Fluid Smoke Shader Canvas */
+        /* 1. Fluid Smoke Shader & Cursor Canvas */
         #particles-canvas {
             position: fixed; inset: 0; pointer-events: none; z-index: 0;
         }
@@ -56,19 +56,20 @@
         .content-relative { position: relative; z-index: 1; }
 
         .version-badge {
-            background: rgba(243, 156, 18, 0.15); border: 1px solid var(--accent-gold);
+            background: rgba(243, 156, 18, 0.18); border: 1px solid var(--accent-gold);
             color: var(--accent-gold); font-size: 11px; font-weight: 800;
             padding: 3px 10px; border-radius: 12px; display: inline-block; margin-right: 6px;
+            box-shadow: 0 0 12px rgba(243, 156, 18, 0.3);
         }
 
         @keyframes floatLogo {
-            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 15px rgba(243, 156, 18, 0.5)); }
-            50% { transform: translateY(-6px) scale(1.02); filter: drop-shadow(0 0 25px rgba(243, 156, 18, 0.8)); }
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 18px rgba(243, 156, 18, 0.6)); }
+            50% { transform: translateY(-7px) scale(1.03); filter: drop-shadow(0 0 30px rgba(243, 156, 18, 0.9)); }
         }
 
-        @keyframes pulseCart3D {
-            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 15px 35px rgba(243, 156, 18, 0.4); }
-            50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 25px 45px rgba(243, 156, 18, 0.7); }
+        @keyframes laserShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         @keyframes rotateStar {
@@ -77,17 +78,19 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        @keyframes laserBeam {
-            0% { left: -100%; }
-            100% { left: 200%; }
+        /* 4. Metallic Laser Shimmer Typography */
+        .shimmer-text {
+            background: linear-gradient(90deg, #ffffff 0%, var(--accent-gold) 50%, #ffffff 100%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: laserShimmer 4s linear infinite;
         }
 
         /* Smoke Bar Ticker Banner */
         .smoke-ticker-wrapper {
-            background: rgba(15, 21, 35, 0.9); border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 8px 16px; margin-bottom: 16px; overflow: hidden;
+            background: rgba(12, 17, 28, 0.92); border: 1px solid var(--border-glow);
+            border-radius: 18px; padding: 10px 18px; margin-bottom: 18px; overflow: hidden;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.25);
         }
         .smoke-ticker-text {
             font-size: 13px; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;
@@ -95,12 +98,12 @@
 
         /* Header Hero Section */
         .hero-header {
-            background: rgba(15, 21, 35, 0.75);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border-glow); border-radius: 26px;
-            padding: 25px 20px 20px 20px; text-align: center; margin-bottom: 20px;
+            background: rgba(12, 17, 28, 0.8);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid var(--border-glow); border-radius: 28px;
+            padding: 28px 22px 22px 22px; text-align: center; margin-bottom: 22px;
             position: relative; overflow: hidden;
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(243, 156, 18, 0.25);
+            box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(243, 156, 18, 0.3);
         }
 
         .hero-header::before {
@@ -109,119 +112,114 @@
         }
 
         .shop-logo {
-            width: 105px; height: 105px; border-radius: 50%;
-            border: 3px solid var(--accent-gold); margin-bottom: 12px; object-fit: cover;
+            width: 110px; height: 110px; border-radius: 50%;
+            border: 3.5px solid var(--accent-gold); margin-bottom: 14px; object-fit: cover;
             animation: floatLogo 4s ease-in-out infinite;
         }
 
         .hero-header h1 {
-            color: #fff; margin: 0; font-size: 29px; font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 20%, var(--accent-gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; font-size: 30px; font-weight: 900;
         }
 
         .hero-badges-row {
-            display: flex; justify-content: center; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+            display: flex; justify-content: center; gap: 10px; margin-top: 16px; flex-wrap: wrap;
         }
 
         .hero-badge {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(243, 156, 18, 0.3);
-            border-radius: 20px; padding: 6px 14px; font-size: 11.5px;
-            font-weight: 700; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(243, 156, 18, 0.35);
+            border-radius: 20px; padding: 6px 15px; font-size: 11.5px;
+            font-weight: 800; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px;
         }
         .hero-badge i { color: var(--accent-gold); }
 
         .header-info-box {
-            margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); font-weight: 700; line-height: 1.6;
+            margin-top: 14px; font-size: 13px; color: var(--text-secondary); font-weight: 700; line-height: 1.6;
         }
 
         /* Category Filter Pills */
         .categories-container {
-            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 18px;
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px;
             scrollbar-width: none;
         }
         .categories-container::-webkit-scrollbar { display: none; }
 
         .cat-pill {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-glass);
-            color: var(--text-secondary); padding: 10px 20px; border-radius: 16px;
-            font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap;
+            color: var(--text-secondary); padding: 11px 22px; border-radius: 18px;
+            font-size: 13.5px; font-weight: 800; cursor: pointer; white-space: nowrap;
             display: inline-flex; align-items: center; gap: 8px;
         }
         .cat-pill:hover { background: rgba(255, 255, 255, 0.08); color: #fff; transform: translateY(-2px); border-color: var(--accent-gold); }
         .cat-pill.active {
             background: var(--gradient-gold); color: #fff; border-color: var(--accent-gold);
-            box-shadow: 0 8px 20px -4px rgba(243, 156, 18, 0.6);
+            box-shadow: 0 8px 25px -4px rgba(243, 156, 18, 0.7);
         }
 
         /* Search Section */
-        .search-bar-wrapper { position: relative; margin-bottom: 22px; }
+        .search-bar-wrapper { position: relative; margin-bottom: 24px; }
         .search-bar-wrapper input {
             width: 100%; padding: 16px 48px 16px 20px;
-            background: rgba(13, 18, 30, 0.85); backdrop-filter: blur(15px);
-            border: 1px solid rgba(243, 156, 18, 0.3); border-radius: 18px;
-            color: #fff; font-size: 14.5px; outline: none; font-weight: 700;
+            background: rgba(10, 15, 26, 0.9); backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(243, 156, 18, 0.35); border-radius: 20px;
+            color: #fff; font-size: 15px; outline: none; font-weight: 700;
         }
         .search-bar-wrapper input:focus {
-            border-color: var(--accent-gold); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
+            border-color: var(--accent-gold); box-shadow: 0 0 30px rgba(243, 156, 18, 0.45);
         }
         .search-icon {
             position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
-            color: var(--accent-gold); font-size: 17px; pointer-events: none;
+            color: var(--accent-gold); font-size: 18px; pointer-events: none;
         }
 
         /* Products Grid */
         .shop-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-            gap: 16px; margin-bottom: 40px; perspective: 1200px;
+            gap: 18px; margin-bottom: 40px; perspective: 1200px;
         }
 
-        /* 2. 3D Floating Pop-Out Glass Cards */
+        /* 2. 🎴 3D Holographic Foil Cards */
         .product-card {
             background: var(--bg-card);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass); border-radius: 24px; padding: 16px; text-align: center;
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass); border-radius: 26px; padding: 16px; text-align: center;
             display: flex; flex-direction: column; justify-content: space-between;
             position: relative; overflow: hidden;
             transform-style: preserve-3d; transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
-        .product-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-            transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
+        /* Holographic Sheen Layer */
+        .product-card .holo-sheen {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,255,255,0) 60%);
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
+        .product-card:hover .holo-sheen { opacity: 1; }
 
-        .product-card:hover::before {
-            animation: laserBeam 1s ease-in-out;
-        }
-
-        /* 4. Dynamic Atmosphere Glow Variants */
         .product-card.glow-apple { border-color: rgba(239, 68, 68, 0.4); }
-        .product-card.glow-apple:hover { border-color: #ef4444; box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4); }
+        .product-card.glow-apple:hover { border-color: #ef4444; box-shadow: 0 18px 40px rgba(239, 68, 68, 0.45); }
         
         .product-card.glow-mint { border-color: rgba(0, 242, 254, 0.4); }
-        .product-card.glow-mint:hover { border-color: #00f2fe; box-shadow: 0 15px 35px rgba(0, 242, 254, 0.4); }
+        .product-card.glow-mint:hover { border-color: #00f2fe; box-shadow: 0 18px 40px rgba(0, 242, 254, 0.45); }
 
         .product-card.glow-vape { border-color: rgba(168, 85, 247, 0.4); }
-        .product-card.glow-vape:hover { border-color: #a855f7; box-shadow: 0 15px 35px rgba(168, 85, 247, 0.4); }
+        .product-card.glow-vape:hover { border-color: #a855f7; box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45); }
 
         .product-card.glow-smoke { border-color: rgba(243, 156, 18, 0.4); }
-        .product-card.glow-smoke:hover { border-color: #f39c12; box-shadow: 0 15px 35px rgba(243, 156, 18, 0.4); }
+        .product-card.glow-smoke:hover { border-color: #f39c12; box-shadow: 0 18px 40px rgba(243, 156, 18, 0.45); }
 
-        /* Pop-Out 3D Image Box */
+        /* Pop-Out 3D Image Box with Lightbox Clicker */
         .product-img-box {
-            width: 100%; height: 140px; border-radius: 16px;
-            object-fit: contain; background: rgba(0, 0, 0, 0.5); padding: 6px;
-            margin-bottom: 10px; border: 1px solid rgba(243, 156, 18, 0.4);
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 8px 20px rgba(0,0,0,0.6);
-            transform: translateZ(25px); transition: transform 0.3s ease;
+            width: 100%; height: 145px; border-radius: 18px;
+            object-fit: contain; background: rgba(0, 0, 0, 0.55); padding: 6px;
+            margin-bottom: 12px; border: 1.5px solid rgba(243, 156, 18, 0.4);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.85), 0 10px 25px rgba(0,0,0,0.6);
+            transform: translateZ(30px); transition: transform 0.3s ease; cursor: zoom-in;
         }
-        .product-card:hover .product-img-box { transform: translateZ(35px) scale(1.04); }
+        .product-card:hover .product-img-box { transform: translateZ(40px) scale(1.05); }
 
         .status-badge-dynamic {
             position: absolute; top: 10px; left: 10px;
-            padding: 3px 9px; border-radius: 12px; font-size: 9.5px;
+            padding: 4px 10px; border-radius: 14px; font-size: 9.5px;
             font-weight: 800; display: inline-flex; align-items: center; gap: 4px; z-index: 2;
         }
         .badge-smoke {
@@ -231,7 +229,7 @@
 
         .group-tag {
             font-size: 10px; font-weight: 800; color: var(--accent-gold);
-            background: rgba(243, 156, 18, 0.15); border: 1px solid rgba(243, 156, 18, 0.3);
+            background: rgba(243, 156, 18, 0.15); border: 1px solid rgba(243, 156, 18, 0.35);
             padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 8px;
         }
 
@@ -241,54 +239,67 @@
         }
 
         .price-box {
-            background: rgba(0, 0, 0, 0.4); border-radius: 14px; padding: 8px;
-            margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.45); border-radius: 14px; padding: 8px;
+            margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.06);
             transform: translateZ(10px);
         }
         .price-single { font-size: 16px; font-weight: 900; color: var(--success); }
 
         .add-cart-btn {
-            width: 100%; padding: 10px; background: var(--gradient-gold);
+            width: 100%; padding: 11px; background: var(--gradient-gold);
             color: #fff; border: none; border-radius: 14px; font-size: 13px;
             font-weight: 800; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; gap: 8px; box-shadow: 0 6px 18px -4px rgba(243, 156, 18, 0.5);
+            justify-content: center; gap: 8px; box-shadow: 0 6px 20px -4px rgba(243, 156, 18, 0.6);
             transform: translateZ(20px);
         }
         .add-cart-btn:hover { transform: translateZ(25px) scale(1.03); }
 
-        /* 3. 📱 iOS-Style Mobile Bottom Dock */
+        /* 5. 📱 iOS Liquid Glass Mobile Bottom Dock */
         .mobile-bottom-dock {
             position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 450px; background: rgba(10, 14, 24, 0.95);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1.5px solid var(--accent-gold); border-radius: 24px; padding: 8px 12px;
+            width: 92%; max-width: 450px; background: rgba(8, 12, 22, 0.95);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid var(--accent-gold); border-radius: 26px; padding: 8px 12px;
             display: flex; justify-content: space-around; align-items: center; z-index: 100;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 25px rgba(243, 156, 18, 0.35);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), 0 0 30px rgba(243, 156, 18, 0.4);
         }
 
         .dock-item {
             display: flex; flex-direction: column; align-items: center; gap: 3px;
             color: var(--text-secondary); font-size: 10px; font-weight: 800; cursor: pointer;
-            padding: 6px 12px; border-radius: 14px; text-decoration: none; position: relative;
+            padding: 6px 12px; border-radius: 16px; text-decoration: none; position: relative;
         }
         .dock-item i { font-size: 18px; color: var(--text-secondary); }
         .dock-item.active i, .dock-item:hover i { color: var(--accent-gold); }
-        .dock-item.active, .dock-item:hover { color: #fff; background: rgba(243, 156, 18, 0.12); }
+        .dock-item.active, .dock-item:hover { color: #fff; background: rgba(243, 156, 18, 0.15); }
 
         .dock-cart-badge {
             position: absolute; top: 2px; right: 8px; background: var(--accent-gold); color: #000;
             font-size: 10px; font-weight: 900; border-radius: 50%; padding: 1px 6px;
         }
 
-        /* 5. ⚖️ Interactive 3D Visual Gram Weight Slider Modal */
+        /* 3. 💎 3D Luxury Gallery Lightbox Modal */
+        .lightbox-modal-card {
+            background: rgba(8, 12, 22, 0.95); backdrop-filter: blur(30px);
+            border: 2px solid var(--accent-gold); border-radius: 28px;
+            padding: 24px; width: 100%; max-width: 480px; text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.95), 0 0 40px rgba(243, 156, 18, 0.4);
+        }
+        .lightbox-img-full {
+            width: 100%; max-height: 380px; object-fit: contain; border-radius: 20px;
+            background: rgba(0,0,0,0.6); padding: 8px; border: 1px solid rgba(243,156,18,0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        }
+
+        /* Weight Slider Modal */
         .weight-modal-card {
-            background: #0b0f19; border: 2px solid var(--accent-gold); border-radius: 28px;
+            background: #080c16; border: 2px solid var(--accent-gold); border-radius: 28px;
             padding: 26px; width: 100%; max-width: 420px; text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 35px rgba(243, 156, 18, 0.35);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 35px rgba(243, 156, 18, 0.4);
         }
         
         .scale-display {
-            background: rgba(0, 0, 0, 0.6); border: 1.5px solid var(--accent-gold);
+            background: rgba(0, 0, 0, 0.65); border: 1.5px solid var(--accent-gold);
             border-radius: 18px; padding: 16px; margin: 16px 0; text-align: center;
         }
         .scale-weight-val { font-size: 32px; font-weight: 900; color: var(--accent-gold); text-shadow: 0 0 15px rgba(243,156,18,0.5); }
@@ -309,12 +320,12 @@
         /* Modal Base */
         .modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
-            display: none; justify-content: center; align-items: center; z-index: 200; padding: 15px;
+            display: none; justify-content: center; align-items: center; z-index: 250; padding: 15px;
         }
         .modal-card {
-            background: #0b0f19; border: 1.5px solid var(--accent-gold); border-radius: 26px;
+            background: #080c16; border: 1.5px solid var(--accent-gold); border-radius: 26px;
             padding: 25px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9), 0 0 30px rgba(243,156,18,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9), 0 0 30px rgba(243,156,18,0.35);
         }
 
         .cart-items-list { max-height: 190px; overflow-y: auto; margin-bottom: 16px; padding-left: 4px; }
@@ -340,7 +351,7 @@
 
         .developer-footer {
             margin-top: 50px; margin-bottom: 90px; text-align: center; padding: 20px;
-            background: rgba(15, 21, 35, 0.5); border-top: 1px solid rgba(243, 156, 18, 0.2);
+            background: rgba(12, 17, 28, 0.5); border-top: 1px solid rgba(243, 156, 18, 0.25);
             border-radius: 18px; font-size: 12px; color: var(--text-secondary);
         }
         .developer-footer strong { color: var(--accent-gold); }
@@ -357,7 +368,7 @@
 </head>
 <body>
 
-    <!-- Animated Dust/Smoke Shader Canvas Background -->
+    <!-- 1. 💨 Fluid Smoke Particle Shader Canvas Background & Cursor Trail -->
     <canvas id="particles-canvas"></canvas>
 
     <div class="content-relative">
@@ -365,7 +376,7 @@
         <div class="smoke-ticker-wrapper">
             <div class="smoke-ticker-text">
                 <i class="fa-solid fa-cloud-meatball"></i>
-                <span>متجر نفَس للسكائر والأراجيل والمعسل الفاخر | توصيل سريع لباب البيت داخل بغداد 🛵💨</span>
+                <span class="shimmer-text">متجر نفَس الملكي للسكائر والأراجيل والمعسل الفاخر | توصيل سريع لباب البيت داخل بغداد 🛵💨</span>
                 <i class="fa-solid fa-fire-flame-curved"></i>
             </div>
         </div>
@@ -373,7 +384,7 @@
         <!-- Hero Header -->
         <div class="hero-header">
             <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-            <h1>متجر نفَس للسكائر والأراجيل <span class="version-badge">v1.8</span></h1>
+            <h1 class="shimmer-text">متجر نفَس الملكي للسكائر والأراجيل <span class="version-badge">v1.9</span></h1>
             
             <div class="hero-badges-row">
                 <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع للبيت</span>
@@ -405,7 +416,7 @@
 
         <!-- Developer Footer -->
         <div class="developer-footer">
-            <div>Designed & Developed by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.8</span></div>
+            <div>Designed & Developed  by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.9</span></div>
             <div style="margin-top: 8px;">
                 <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
                 <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -413,7 +424,7 @@
         </div>
     </div>
 
-    <!-- 3. 📱 iOS-Style Mobile Bottom Dock -->
+    <!-- 5. 📱 iOS Liquid Glass Mobile Bottom Dock -->
     <div class="mobile-bottom-dock">
         <div class="dock-item active" onclick="scrollToTop()">
             <i class="fa-solid fa-house"></i>
@@ -434,7 +445,21 @@
         </a>
     </div>
 
-    <!-- 5. ⚖️ Interactive 3D Visual Gram Weight Slider Modal -->
+    <!-- 3. 💎 3D Luxury Gallery Lightbox Modal -->
+    <div class="modal" id="lightbox-modal">
+        <div class="lightbox-modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3 style="margin:0; color:var(--accent-gold);" id="lightbox-item-title">معاينة تفاصيل المنتج 🔍</h3>
+                <button type="button" style="background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:16px; border-radius:50%; width:32px; height:32px; cursor:pointer;" onclick="closeLightboxModal()">✕</button>
+            </div>
+            <img src="" id="lightbox-card-img" class="lightbox-img-full">
+            <div style="margin-top:16px;">
+                <span class="price-single" style="font-size:22px;" id="lightbox-item-price">0 د.ع</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⚖️ Interactive 3D Visual Gram Weight Slider Modal -->
     <div class="modal" id="weight-slider-modal">
         <div class="weight-modal-card">
             <h3 style="color:#fff; margin-top:0; font-size:18px;" id="weight-item-name">تحديد وزن المعسل ⚖️</h3>
@@ -498,11 +523,12 @@
 
 <script>
     /* ============================================================
-       1. Fluid Smoke Shader Particle Canvas Background
+       1. 💨 Fluid Smoke Particle Shader Canvas & Interactive Touch Cursor Trail
        ============================================================ */
     const canvas = document.getElementById("particles-canvas");
     const ctx = canvas.getContext("2d");
     let particlesArray = [];
+    let mouseTrail = [];
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -510,6 +536,19 @@
     }
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
+
+    window.addEventListener("mousemove", (e) => {
+        mouseTrail.push({ x: e.clientX, y: e.clientY, alpha: 0.65, size: Math.random() * 8 + 3 });
+        if(mouseTrail.length > 25) mouseTrail.shift();
+    });
+
+    window.addEventListener("touchmove", (e) => {
+        if(e.touches.length > 0) {
+            const touch = e.touches[0];
+            mouseTrail.push({ x: touch.clientX, y: touch.clientY, alpha: 0.65, size: Math.random() * 8 + 3 });
+            if(mouseTrail.length > 25) mouseTrail.shift();
+        }
+    });
 
     class SmokeParticle {
         constructor() {
@@ -548,10 +587,29 @@
 
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw background floating smoke particles
         particlesArray.forEach(p => {
             p.update();
             p.draw();
         });
+
+        // Draw Interactive Smoke Cursor Trail
+        mouseTrail.forEach((mt, index) => {
+            mt.alpha -= 0.02;
+            mt.size += 0.2;
+            if(mt.alpha > 0) {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, mt.alpha);
+                ctx.fillStyle = "#f39c12";
+                ctx.beginPath();
+                ctx.arc(mt.x, mt.y, mt.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        });
+        mouseTrail = mouseTrail.filter(mt => mt.alpha > 0);
+
         requestAnimationFrame(animateParticles);
     }
     animateParticles();
@@ -612,7 +670,7 @@
         } catch (e) {}
     }
 
-    /* 2. 3D Pop-Out Tilt Effect */
+    /* 2. 🎴 3D Pop-Out Tilt & Holographic Foil Effect */
     function apply3DTiltToCards() {
         document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
@@ -717,10 +775,9 @@
         visibleProducts.forEach(prod => {
             const isKg = prod.unitType === 'kg';
             const imgHTML = prod.imageUrl 
-                ? `<img src="${escapeHTML(prod.imageUrl)}" class="product-img-box" alt="${escapeHTML(prod.name)}">`
+                ? `<img src="${escapeHTML(prod.imageUrl)}" class="product-img-box" alt="${escapeHTML(prod.name)}" onclick="openLightboxModal('${escapeHTML(prod.imageUrl)}', '${escapeHTML(prod.name)}', '${(prod.singleSell||0).toLocaleString()}')">`
                 : `<div class="product-img-box" style="display:flex; align-items:center; justify-content:center; font-size:36px; color:var(--accent-gold);"><i class="fa-solid fa-cloud-meatball"></i></div>`;
 
-            /* 4. Dynamic Atmosphere Glow Class determination */
             let glowClass = "glow-smoke";
             if (prod.name.includes("تفاحتين") || prod.name.includes("فواكه")) glowClass = "glow-apple";
             else if (prod.name.includes("نعناع") || prod.name.includes("بارد") || prod.name.includes("منعش")) glowClass = "glow-mint";
@@ -728,6 +785,7 @@
 
             container.innerHTML += `
                 <div class="product-card ${glowClass}" id="product-card-${prod.id}">
+                    <div class="holo-sheen"></div>
                     <span class="status-badge-dynamic badge-smoke"><i class="fa-solid fa-wind"></i> نفَس</span>
                     <div>
                         ${imgHTML}
@@ -749,12 +807,21 @@
         apply3DTiltToCards();
     }
 
+    /* 3. 💎 Open Lightbox Modal */
+    function openLightboxModal(imgUrl, name, price) {
+        playBeepSound();
+        document.getElementById("lightbox-card-img").src = imgUrl;
+        document.getElementById("lightbox-item-title").innerText = name;
+        document.getElementById("lightbox-item-price").innerText = price + " د.ع";
+        document.getElementById("lightbox-modal").style.display = "flex";
+    }
+    function closeLightboxModal() { document.getElementById("lightbox-modal").style.display = "none"; }
+
     function handleAddToCartClick(e, prodId) {
         const prod = allProducts.find(p => p.id === prodId);
         if (!prod || prod.qty <= 0) return;
 
         if (prod.unitType === 'kg') {
-            /* 5. Open Interactive 3D Visual Gram Weight Slider Modal */
             pendingWeightProduct = prod;
             document.getElementById("weight-item-name").innerText = `${prod.name} ⚖️`;
             document.getElementById("gram-range-slider").value = 0.5;
@@ -823,7 +890,6 @@
     function triggerFlyToCart(e, itemId) {
         playBeepSound();
         const card = document.getElementById(`product-card-${itemId}`);
-        const dockBadge = document.getElementById('dock-cart-count');
         if(!card) return;
 
         const cardRect = card.getBoundingClientRect();
