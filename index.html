@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر نفَس الإلكتروني | Nafas Shop (v1.6)</title>
+    <title>متجر نفَس الإلكتروني | للسكائر والأراجيل والمعسل (v1.7)</title>
     <!-- خطوط جوجل العالمية -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <!-- أيقونات FontAwesome 6 -->
@@ -15,21 +15,23 @@
 
     <style>
         :root {
-            --bg-dark: #070a12;
-            --bg-card: rgba(18, 24, 38, 0.75);
-            --bg-card-hover: rgba(28, 38, 61, 0.95);
+            --bg-dark: #05070e;
+            --bg-card: rgba(14, 19, 31, 0.85);
+            --bg-card-hover: rgba(26, 35, 56, 0.95);
             --accent-gold: #f39c12;
             --accent-amber: #e67e22;
+            --accent-ember: #ff5722;
             --cyber-cyan: #00f2fe;
             --gradient-gold: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
-            --gradient-glow: radial-gradient(circle at center, rgba(243, 156, 18, 0.15) 0%, transparent 70%);
+            --gradient-ember: linear-gradient(135deg, #ff5722 0%, #f39c12 100%);
+            --gradient-glow: radial-gradient(circle at center, rgba(243, 156, 18, 0.2) 0%, transparent 70%);
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
             --border-glass: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(243, 156, 18, 0.4);
+            --border-glow: rgba(243, 156, 18, 0.5);
         }
 
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -37,15 +39,15 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(243, 156, 18, 0.15) 0px, transparent 45%),
-                radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(147, 51, 234, 0.05) 0px, transparent 60%);
+                radial-gradient(at 0% 0%, rgba(243, 156, 18, 0.18) 0px, transparent 45%),
+                radial-gradient(at 100% 100%, rgba(255, 87, 34, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(0, 242, 254, 0.04) 0px, transparent 60%);
             background-attachment: fixed;
             color: var(--text-primary); margin: 0; padding: 12px; min-height: 100vh;
             overflow-x: hidden; position: relative;
         }
 
-        /* Background Animated Particles Canvas */
+        /* Background Animated Dust/Smoke Particles Canvas */
         #particles-canvas {
             position: fixed; inset: 0; pointer-events: none; z-index: 0;
         }
@@ -60,8 +62,8 @@
 
         /* Keyframe Animations */
         @keyframes floatLogo {
-            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 15px rgba(243, 156, 18, 0.4)); }
-            50% { transform: translateY(-6px) scale(1.02); filter: drop-shadow(0 0 25px rgba(243, 156, 18, 0.7)); }
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 15px rgba(243, 156, 18, 0.5)); }
+            50% { transform: translateY(-6px) scale(1.02); filter: drop-shadow(0 0 25px rgba(243, 156, 18, 0.8)); }
         }
 
         @keyframes pulseCart3D {
@@ -75,24 +77,30 @@
             100% { transform: rotate(360deg) scale(1); }
         }
 
-        @keyframes pulseWarningBadge {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 16px rgba(239, 68, 68, 0.9); }
+        @keyframes tickerMove {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Smoke Bar Ticker */
+        .smoke-ticker-wrapper {
+            background: rgba(15, 21, 35, 0.9); border: 1px solid var(--border-glow);
+            border-radius: 16px; padding: 8px 16px; margin-bottom: 16px; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+        }
+        .smoke-ticker-text {
+            font-size: 13px; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;
         }
 
         /* Header Hero Section */
         .hero-header {
-            background: rgba(15, 21, 35, 0.65);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border-glass);
-            border-radius: 26px;
-            padding: 25px 20px 20px 20px;
-            text-align: center;
-            margin-bottom: 22px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            background: rgba(15, 21, 35, 0.75);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glow); border-radius: 26px;
+            padding: 25px 20px 20px 20px; text-align: center; margin-bottom: 20px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(243, 156, 18, 0.25);
         }
 
         .hero-header::before {
@@ -101,17 +109,15 @@
         }
 
         .shop-logo {
-            width: 95px; height: 95px; border-radius: 50%;
-            border: 3px solid var(--accent-gold);
-            margin-bottom: 12px; object-fit: cover;
+            width: 105px; height: 105px; border-radius: 50%;
+            border: 3px solid var(--accent-gold); margin-bottom: 12px; object-fit: cover;
             animation: floatLogo 4s ease-in-out infinite;
         }
 
         .hero-header h1 {
-            color: #fff; margin: 0; font-size: 28px; font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 30%, var(--accent-gold) 100%);
+            color: #fff; margin: 0; font-size: 29px; font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 20%, var(--accent-gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
 
         .hero-badges-row {
@@ -119,15 +125,14 @@
         }
 
         .hero-badge {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(243, 156, 18, 0.3);
             border-radius: 20px; padding: 6px 14px; font-size: 11.5px;
             font-weight: 700; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px;
         }
         .hero-badge i { color: var(--accent-gold); }
 
         .header-info-box {
-            margin-top: 12px; font-size: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6;
+            margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); font-weight: 700; line-height: 1.6;
         }
 
         /* Category Filter Pills */
@@ -138,33 +143,27 @@
         .categories-container::-webkit-scrollbar { display: none; }
 
         .cat-pill {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            color: var(--text-secondary);
-            padding: 10px 20px; border-radius: 16px;
-            font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-glass);
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 16px;
+            font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap;
             display: inline-flex; align-items: center; gap: 8px;
         }
-        .cat-pill:hover { background: rgba(255, 255, 255, 0.08); color: #fff; transform: translateY(-2px); }
+        .cat-pill:hover { background: rgba(255, 255, 255, 0.08); color: #fff; transform: translateY(-2px); border-color: var(--accent-gold); }
         .cat-pill.active {
-            background: var(--gradient-gold); color: #fff;
-            border-color: var(--accent-gold);
-            box-shadow: 0 8px 20px -4px rgba(243, 156, 18, 0.5);
+            background: var(--gradient-gold); color: #fff; border-color: var(--accent-gold);
+            box-shadow: 0 8px 20px -4px rgba(243, 156, 18, 0.6);
         }
 
         /* Search Section */
-        .search-bar-wrapper {
-            position: relative; margin-bottom: 22px;
-        }
+        .search-bar-wrapper { position: relative; margin-bottom: 22px; }
         .search-bar-wrapper input {
             width: 100%; padding: 16px 48px 16px 20px;
             background: rgba(13, 18, 30, 0.85); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px;
-            color: #fff; font-size: 14.5px; outline: none; font-weight: 600;
+            border: 1px solid rgba(243, 156, 18, 0.3); border-radius: 18px;
+            color: #fff; font-size: 14.5px; outline: none; font-weight: 700;
         }
         .search-bar-wrapper input:focus {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 25px rgba(243, 156, 18, 0.35);
+            border-color: var(--accent-gold); box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
         }
         .search-icon {
             position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
@@ -181,8 +180,7 @@
         .product-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-            border-radius: 22px; padding: 16px; text-align: center;
+            border: 1px solid var(--border-glass); border-radius: 22px; padding: 16px; text-align: center;
             display: flex; flex-direction: column; justify-content: space-between;
             position: relative; overflow: hidden;
             transform-style: preserve-3d; transition: transform 0.15s ease-out, box-shadow 0.3s ease;
@@ -193,119 +191,87 @@
             background: var(--gradient-gold); opacity: 0; transition: opacity 0.3s ease;
         }
 
-        /* Holographic Overlay */
-        .product-card .holo-shine {
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
-            pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
-        }
-
         .product-card:hover {
             border-color: var(--border-glow);
             box-shadow: 0 20px 40px -10px rgba(243, 156, 18, 0.4);
         }
-        .product-card:hover .holo-shine { opacity: 1; }
         .product-card:hover::before { opacity: 1; }
 
-        /* Full Image Display Without Cropping */
         .product-img-box {
-            width: 100%; height: 135px; border-radius: 14px;
-            object-fit: contain; background: rgba(0, 0, 0, 0.4); padding: 4px;
+            width: 100%; height: 140px; border-radius: 16px;
+            object-fit: contain; background: rgba(0, 0, 0, 0.5); padding: 6px;
             margin-bottom: 10px; border: 1px solid rgba(243, 156, 18, 0.4);
             box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 6px 15px rgba(0,0,0,0.5);
         }
 
-        /* Dynamic Visual Badges */
         .status-badge-dynamic {
             position: absolute; top: 10px; left: 10px;
             padding: 3px 9px; border-radius: 12px; font-size: 9.5px;
-            font-weight: 800; display: inline-flex; align-items: center; gap: 4px;
-            z-index: 2;
+            font-weight: 800; display: inline-flex; align-items: center; gap: 4px; z-index: 2;
         }
-        .badge-limited {
-            background: rgba(239, 68, 68, 0.25); color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.6);
-            animation: pulseWarningBadge 2s infinite;
-        }
-        .badge-hot {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(239, 68, 68, 0.3) 100%);
-            color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.6);
-        }
-        .badge-new {
-            background: rgba(0, 242, 254, 0.2); color: #00f2fe;
-            border: 1px solid rgba(0, 242, 254, 0.5);
+        .badge-smoke {
+            background: rgba(243, 156, 18, 0.25); color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
         }
 
         .group-tag {
             font-size: 10px; font-weight: 800; color: var(--accent-gold);
-            background: rgba(243, 156, 18, 0.12); border: 1px solid rgba(243, 156, 18, 0.25);
+            background: rgba(243, 156, 18, 0.15); border: 1px solid rgba(243, 156, 18, 0.3);
             padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 8px;
         }
 
         .product-card h3 {
-            font-size: 15px; font-weight: 800; margin: 6px 0 10px 0; color: #fff;
-            line-height: 1.4;
+            font-size: 15px; font-weight: 800; margin: 6px 0 10px 0; color: #fff; line-height: 1.4;
         }
 
         .price-box {
-            color: var(--success); font-weight: 900; font-size: 16px; margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            background: rgba(0, 0, 0, 0.4); border-radius: 14px; padding: 8px;
+            margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .price-single { font-size: 16px; font-weight: 900; color: var(--success); }
 
-        .weight-select {
-            width: 100%; padding: 6px 10px; background: rgba(0,0,0,0.5);
-            border: 1px solid var(--accent-gold); border-radius: 10px; color: #fff;
-            font-size: 12px; font-weight: 700; margin-bottom: 10px; outline: none;
+        .add-cart-btn {
+            width: 100%; padding: 10px; background: var(--gradient-gold);
+            color: #fff; border: none; border-radius: 14px; font-size: 13px;
+            font-weight: 800; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; gap: 8px; box-shadow: 0 6px 18px -4px rgba(243, 156, 18, 0.5);
         }
+        .add-cart-btn:hover { transform: scale(1.02); }
 
-        .add-to-cart-btn {
-            background: var(--gradient-gold); border: none; color: #fff;
-            padding: 11px 14px; border-radius: 14px; font-weight: 800; font-size: 13px;
-            cursor: pointer; width: 100%; display: inline-flex; align-items: center;
-            justify-content: center; gap: 8px; box-shadow: 0 6px 18px -4px rgba(243, 156, 18, 0.4);
-        }
-        .add-to-cart-btn:active { transform: scale(0.95); }
-
-        /* 3D Glowing Floating Cart Bar Dock */
+        /* 3D Glowing Floating Cart Dock */
         .cart-float-bar {
-            position: fixed; bottom: 20px; left: 20px; right: 20px;
-            background: rgba(15, 21, 35, 0.92); backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 2px solid var(--accent-gold); border-radius: 26px; padding: 14px 22px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; animation: pulseCart3D 3.5s ease-in-out infinite;
-            transform-style: preserve-3d;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 480px; background: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 2px solid var(--accent-gold); border-radius: 24px; padding: 12px 18px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+            animation: pulseCart3D 3s infinite ease-in-out;
         }
 
-        .star-badge-3d {
-            background: var(--gradient-gold); color: #fff;
-            width: 28px; height: 28px; border-radius: 50%;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 900; margin-left: 6px;
-            box-shadow: 0 0 12px var(--accent-gold); animation: rotateStar 8s linear infinite;
-        }
-
-        .cart-float-info { display: flex; flex-direction: column; }
-        .cart-float-count { font-size: 12px; color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; }
-        .cart-float-total { font-weight: 900; color: #fff; font-size: 15.5px; margin-top: 2px; text-shadow: 0 0 10px rgba(243,156,18,0.5); }
+        .cart-float-info { display: flex; flex-direction: column; align-items: flex-start; }
+        .cart-float-count { font-size: 12px; color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .cart-float-total { font-size: 19px; font-weight: 900; color: var(--accent-gold); }
 
         .checkout-trigger-btn {
-            background: var(--gradient-gold); border: none; color: #fff;
-            padding: 12px 22px; border-radius: 14px; font-weight: 800; font-size: 14px;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+            background: var(--gradient-gold); color: #fff; border: none; padding: 10px 18px;
+            border-radius: 16px; font-weight: 900; font-size: 14px; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(243, 156, 18, 0.6);
+        }
+        .checkout-trigger-btn:hover { transform: scale(1.04); }
+
+        .star-badge-3d {
+            display: inline-block; animation: rotateStar 6s linear infinite; color: var(--accent-gold); font-size: 14px;
         }
 
         /* Modal Styles */
         .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(15px); display: none; justify-content: center;
-            align-items: center; z-index: 200; padding: 15px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 200; padding: 15px;
         }
         .modal-card {
-            background: #0f1523; border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 26px; padding: 25px; width: 100%; max-width: 460px;
-            max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9);
+            background: #0b0f19; border: 1.5px solid var(--accent-gold); border-radius: 26px;
+            padding: 25px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9), 0 0 30px rgba(243,156,18,0.3);
         }
 
         .cart-items-list { max-height: 190px; overflow-y: auto; margin-bottom: 16px; padding-left: 4px; }
@@ -331,7 +297,7 @@
 
         .developer-footer {
             margin-top: 50px; margin-bottom: 90px; text-align: center; padding: 20px;
-            background: rgba(15, 21, 35, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 21, 35, 0.5); border-top: 1px solid rgba(243, 156, 18, 0.2);
             border-radius: 18px; font-size: 12px; color: var(--text-secondary);
         }
         .developer-footer strong { color: var(--accent-gold); }
@@ -352,15 +318,24 @@
     <canvas id="particles-canvas"></canvas>
 
     <div class="content-relative">
+        <!-- Smoke Ticker Banner -->
+        <div class="smoke-ticker-wrapper">
+            <div class="smoke-ticker-text">
+                <i class="fa-solid fa-cloud-meatball"></i>
+                <span>متجر نفَس للسكائر والأراجيل والمعسل الفاخر | توصيل سريع لباب البيت داخل بغداد 🛵💨</span>
+                <i class="fa-solid fa-fire-flame-curved"></i>
+            </div>
+        </div>
+
         <!-- Hero Header -->
         <div class="hero-header">
             <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-            <h1>متجر نفَس الإلكتروني <span class="version-badge">v1.6</span></h1>
+            <h1>متجر نفَس للسكائر والأراجيل <span class="version-badge">v1.7</span></h1>
             
             <div class="hero-badges-row">
-                <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لباب البيت</span>
-                <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> منتجات أصلية 100%</span>
-                <span class="hero-badge"><i class="fa-solid fa-scale-balanced"></i> متوفر بيع بالقطع والغرامات الكيلو</span>
+                <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع للبيت</span>
+                <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> معسل وأراجيل أصلي 100%</span>
+                <span class="hero-badge"><div class="star-badge-3d">💨</div> بيع مفرد بالأوزان والجملة</span>
             </div>
 
             <div class="header-info-box">
@@ -372,22 +347,22 @@
         <!-- Search Section -->
         <div class="search-bar-wrapper">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="search-input" placeholder="ابحث عن اسم المنتج أو المادة..." onkeyup="filterProducts()">
+            <input type="text" id="search-input" placeholder="ابحث عن اسم السكائر، المعسل، أو الأرجيلة..." onkeyup="filterProducts()">
         </div>
 
         <!-- Category Filter Pills -->
         <div class="categories-container" id="categories-pills-box">
-            <button class="cat-pill active" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع المجموعات</button>
+            <button class="cat-pill active" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع الأقسام</button>
         </div>
 
         <!-- Products Grid -->
         <div class="shop-grid" id="products-container">
-            <p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding: 30px;">جاري تحميل منتجات متجر نفَس...</p>
+            <p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding: 30px;">جاري تحميل معروضات متجر نفَس...</p>
         </div>
 
         <!-- Developer Footer -->
         <div class="developer-footer">
-            <div>Designed & Developed by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.5</span></div>
+            <div>Designed & Developed by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.7</span></div>
             <div style="margin-top: 8px;">
                 <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
                 <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -398,7 +373,7 @@
         <div class="cart-float-bar" id="cart-float-bar" style="display: none;">
             <div class="cart-float-info">
                 <span class="cart-float-count" id="cart-count">
-                    <span class="star-badge-3d"><i class="fa-solid fa-star"></i></span>
+                    <span class="star-badge-3d">💨</span>
                     0 مواد بالسلة
                 </span>
                 <span class="cart-float-total" id="cart-total">0 د.ع</span>
@@ -465,7 +440,7 @@
             this.size = Math.random() * 2.5 + 0.5;
             this.speedX = (Math.random() - 0.5) * 0.4;
             this.speedY = (Math.random() - 0.5) * 0.4;
-            this.alpha = Math.random() * 0.6 + 0.2;
+            this.alpha = Math.random() * 0.5 + 0.2;
         }
         update() {
             this.x += this.speedX;
@@ -504,47 +479,23 @@
     animateParticles();
 
     /* ============================================================
-       3D Holographic Tilt Card Mouse Event Handlers
-       ============================================================ */
-    function apply3DTiltToCards() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const rotateX = ((y - centerY) / centerY) * -12;
-                const rotateY = ((x - centerX) / centerX) * 12;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-            });
-        });
-    }
-
-    /* ============================================================
        Interactive Web Audio API Sound System
        ============================================================ */
-    let audioCtx = null;
+    let shopAudioCtx = null;
 
-    function getAudioContext() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function getShopAudioContext() {
+        if (!shopAudioCtx) {
+            shopAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        if (shopAudioCtx.state === 'suspended') {
+            shopAudioCtx.resume();
         }
-        return audioCtx;
+        return shopAudioCtx;
     }
 
     function playBeepSound() {
         try {
-            const ctx = getAudioContext();
+            const ctx = getShopAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
@@ -565,7 +516,7 @@
 
     function playSuccessSound() {
         try {
-            const ctx = getAudioContext();
+            const ctx = getShopAudioContext();
             const notes = [523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, i) => {
                 const osc = ctx.createOscillator();
@@ -589,7 +540,7 @@
 
     function playRemoveSound() {
         try {
-            const ctx = getAudioContext();
+            const ctx = getShopAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
@@ -608,6 +559,30 @@
         } catch (e) {}
     }
 
+    /* ============================================================
+       3D Holographic Tilt Card Mouse Events
+       ============================================================ */
+    function apply3DTiltToCards() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+    }
+
     function escapeHTML(str) {
         if (!str) return '';
         return String(str)
@@ -624,117 +599,94 @@
         projectId: "nafas-system-6d5a7",
         storageBucket: "nafas-system-6d5a7.firebasestorage.app",
         messagingSenderId: "475118364089",
-        appId: "1:475118364089:web:4c2681058865c5bc094268",
-        measurementId: "G-6Z3CZ185ZY"
+        appId: "1:475118364089:web:4c2681058865c5bc094268"
     };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const DELIVERY_FEE = 5000;
-    let inventory = [];
-    let groups = [];
+    let allProducts = [];
+    let categories = [];
     let cart = [];
-    let selectedGroupFilter = "";
+    let selectedCategory = '';
+
+    window.addEventListener('click', () => { getShopAudioContext(); }, { once: true });
 
     db.collection("shopGroups").onSnapshot(snapshot => {
-        groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        renderCategoryPills();
+        categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderCategoriesPills();
     });
-
-    function renderCategoryPills() {
-        const box = document.getElementById("categories-pills-box");
-        box.innerHTML = `<button class="cat-pill ${selectedGroupFilter===''?'active':''}" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع المجموعات</button>`;
-        groups.forEach(g => {
-            box.innerHTML += `<button class="cat-pill ${selectedGroupFilter===g.name?'active':''}" onclick="selectCategory('${escapeHTML(g.name)}', this)"><i class="fa-solid fa-tag"></i> ${escapeHTML(g.name)}</button>`;
-        });
-    }
-
-    function selectCategory(groupName, btn) {
-        playBeepSound();
-        selectedGroupFilter = groupName;
-        document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        filterProducts();
-    }
 
     db.collection("inventory").onSnapshot(snapshot => {
-        inventory = snapshot.docs.map(doc => {
-            const d = doc.data();
-            return {
-                id: doc.id,
-                name: d.name,
-                group: d.group,
-                singleSell: d.singleSell,
-                qty: d.qty,
-                imageUrl: d.imageUrl || '',
-                unitType: d.unitType || 'piece',
-                showInShop: d.showInShop
-            };
-        }).filter(i => i.qty > 0 && i.showInShop !== false);
-        filterProducts();
+        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderProducts();
     });
 
-    function filterProducts() {
-        const query = document.getElementById("search-input").value.toLowerCase().trim();
+    function renderCategoriesPills() {
+        const box = document.getElementById("categories-pills-box");
+        box.innerHTML = `<button class="cat-pill ${selectedCategory===''?'active':''}" onclick="selectCategory('', this)"><i class="fa-solid fa-border-all"></i> جميع الأقسام</button>`;
+        
+        categories.forEach(cat => {
+            let iconClass = "fa-fire";
+            if (cat.name.includes("سكائر") || cat.name.includes("سجاير")) iconClass = "fa-smoking";
+            else if (cat.name.includes("معسل") || cat.name.includes("شيشة") || cat.name.includes("أراجيل")) iconClass = "fa-cloud-meatball";
+            else if (cat.name.includes("فيب") || cat.name.includes("Vape")) iconClass = "fa-bolt";
 
-        const filtered = inventory.filter(item => {
-            const matchesName = item.name.toLowerCase().includes(query);
-            const matchesGroup = !selectedGroupFilter || item.group === selectedGroupFilter;
-            return matchesName && matchesGroup;
+            box.innerHTML += `<button class="cat-pill ${selectedCategory===cat.name?'active':''}" onclick="selectCategory('${escapeHTML(cat.name)}', this)"><i class="fa-solid ${iconClass}"></i> ${escapeHTML(cat.name)}</button>`;
         });
-
-        renderProducts(filtered);
     }
 
-    function renderProducts(itemsList) {
-        const box = document.getElementById("products-container");
-        box.innerHTML = '';
-        if(itemsList.length === 0) {
-            box.innerHTML = '<p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding:30px;">لا توجد منتجات مطابقة للبحث حالياً.</p>';
+    function selectCategory(catName, btn) {
+        playBeepSound();
+        selectedCategory = catName;
+        document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderProducts();
+    }
+
+    function filterProducts() { renderProducts(); }
+
+    function renderProducts() {
+        const container = document.getElementById("products-container");
+        const query = document.getElementById("search-input").value.toLowerCase();
+        container.innerHTML = '';
+
+        const visibleProducts = allProducts.filter(p => {
+            if (p.showInShop === false) return false;
+            if (p.qty <= 0) return false;
+            if (selectedCategory && p.group !== selectedCategory) return false;
+            if (query && !p.name.toLowerCase().includes(query) && !p.group.toLowerCase().includes(query)) return false;
+            return true;
+        });
+
+        if (visibleProducts.length === 0) {
+            container.innerHTML = '<p style="text-align: center; grid-column: span 2; color: var(--text-secondary); padding: 40px;">لا توجد معروضات طابقة للبحث حالياً.</p>';
             return;
         }
 
-        itemsList.forEach((p, idx) => {
-            let dynamicBadgeHTML = '';
-            if (p.qty <= 3) {
-                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-limited"><i class="fa-solid fa-triangle-exclamation"></i> كمية محدودة</span>`;
-            } else if (idx === 0 || p.qty > 50) {
-                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-hot"><i class="fa-solid fa-fire-flame-curved"></i> الأكثر طلباً 🔥</span>`;
-            } else if (idx % 3 === 0) {
-                dynamicBadgeHTML = `<span class="status-badge-dynamic badge-new"><i class="fa-solid fa-wand-magic-sparkles"></i> جديد ✨</span>`;
-            }
+        visibleProducts.forEach(prod => {
+            const isKg = prod.unitType === 'kg';
+            const imgHTML = prod.imageUrl 
+                ? `<img src="${escapeHTML(prod.imageUrl)}" class="product-img-box" alt="${escapeHTML(prod.name)}">`
+                : `<div class="product-img-box" style="display:flex; align-items:center; justify-content:center; font-size:36px; color:var(--accent-gold);"><i class="fa-solid fa-cloud-meatball"></i></div>`;
 
-            const isKg = p.unitType === 'kg';
-            const priceLabel = isKg ? `${(p.singleSell || 0).toLocaleString()} د.ع / كجم` : `${(p.singleSell || 0).toLocaleString()} د.ع`;
+            let badgeHTML = `<span class="status-badge-dynamic badge-smoke"><i class="fa-solid fa-wind"></i> نفَس</span>`;
 
-            let weightSelectorHTML = '';
-            if (isKg) {
-                weightSelectorHTML = `
-                    <select class="weight-select" id="weight-sel-${p.id}">
-                        <option value="0.25">250 غرام (ربع كيلو)</option>
-                        <option value="0.5" selected>500 غرام (نصف كيلو)</option>
-                        <option value="1">1 كيلوغرام (كيلو كامل)</option>
-                        <option value="2">2 كيلوغرام</option>
-                    </select>
-                `;
-            }
-
-            const imageHTML = p.imageUrl ? `<img src="${escapeHTML(p.imageUrl)}" class="product-img-box" onerror="this.style.display='none';">` : '';
-
-            box.innerHTML += `
-                <div class="product-card" id="shop-card-${p.id}">
-                    <div class="holo-shine"></div>
-                    ${dynamicBadgeHTML}
-                    ${imageHTML}
+            container.innerHTML += `
+                <div class="product-card" id="product-card-${prod.id}">
+                    ${badgeHTML}
                     <div>
-                        <span class="group-tag" style="margin-top: ${dynamicBadgeHTML ? '16px' : '0'}">${escapeHTML(p.group)} ${isKg ? '⚖️' : ''}</span>
-                        <h3>${escapeHTML(p.name)}</h3>
+                        ${imgHTML}
+                        <span class="group-tag">${escapeHTML(prod.group)}</span>
+                        <h3>${escapeHTML(prod.name)}</h3>
                     </div>
                     <div>
-                        <div class="price-box">${priceLabel}</div>
-                        ${weightSelectorHTML}
-                        <button class="add-to-cart-btn" onclick="triggerShopFlyToCart(event, '${p.id}'); addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> إضافة للسلة</button>
+                        <div class="price-box">
+                            <span class="price-single">${isKg ? 'الكيلو:' : ''} ${(prod.singleSell || 0).toLocaleString()} د.ع</span>
+                        </div>
+                        <button class="add-cart-btn" onclick="triggerFlyToCart(event, '${prod.id}'); addToCart('${prod.id}')">
+                            <i class="fa-solid fa-cart-plus"></i> إضافـة للسلة
+                        </button>
                     </div>
                 </div>
             `;
@@ -743,24 +695,26 @@
         apply3DTiltToCards();
     }
 
-    function triggerShopFlyToCart(e, itemId) {
+    function triggerFlyToCart(e, itemId) {
         playBeepSound();
-        const card = document.getElementById(`shop-card-${itemId}`);
-        if(!card) return;
+        const card = document.getElementById(`product-card-${itemId}`);
+        const cartDock = document.getElementById('cart-float-bar');
+        if(!card || !cartDock) return;
 
         const cardRect = card.getBoundingClientRect();
+        const dockRect = cartDock.getBoundingClientRect();
 
         const particle = document.createElement('div');
         particle.className = 'fly-particle';
-        particle.innerHTML = '<i class="fa-solid fa-cart-plus"></i>';
+        particle.innerHTML = '<i class="fa-solid fa-star"></i>';
         particle.style.left = `${cardRect.left + cardRect.width / 2}px`;
         particle.style.top = `${cardRect.top + cardRect.height / 2}px`;
 
         document.body.appendChild(particle);
 
         setTimeout(() => {
-            particle.style.left = `${window.innerWidth / 2}px`;
-            particle.style.top = `${window.innerHeight - 30}px`;
+            particle.style.left = `${dockRect.left + dockRect.width / 2}px`;
+            particle.style.top = `${dockRect.top + 10}px`;
             particle.style.opacity = '0.2';
             particle.style.transform = 'scale(0.3)';
         }, 20);
@@ -768,113 +722,124 @@
         setTimeout(() => { particle.remove(); }, 750);
     }
 
-    function addToCart(id) {
-        const prod = inventory.find(i => i.id === id);
-        if(!prod) return;
+    function addToCart(prodId) {
+        const prod = allProducts.find(p => p.id === prodId);
+        if (!prod || prod.qty <= 0) return;
 
-        let amount = 1;
-        let unitText = "قطعة";
+        const isKg = prod.unitType === 'kg';
+        let weightOrQty = 1;
 
-        if(prod.unitType === 'kg') {
-            const weightSel = document.getElementById(`weight-sel-${id}`);
-            amount = weightSel ? parseFloat(weightSel.value) : 1;
-            unitText = amount >= 1 ? `${amount} كجم` : `${amount * 1000} غرام`;
+        if (isKg) {
+            const inputVal = prompt(`أدخل الوزن المطلوب بالكيلوغرامات أو الغرامات للمادة (${prod.name}):\n(مثال: 0.25 لـ 250 غرام ، 0.5 للنصف كيلو ، 1 للكيلو)`, "0.5");
+            if (!inputVal) return;
+            weightOrQty = parseFloat(inputVal);
+            if (isNaN(weightOrQty) || weightOrQty <= 0) { alert("الوزن أدخل بشكل غير صحيح!"); return; }
         }
 
-        const item = cart.find(c => c.id === id && c.amount === amount);
-        if(item) {
-            item.qty += 1;
+        const existing = cart.find(c => c.id === prodId && c.type === (isKg ? 'kg' : 'single'));
+        let currentAmountInCart = existing ? (existing.qty + weightOrQty) : weightOrQty;
+
+        if (currentAmountInCart > prod.qty) {
+            alert(`المتوفر بالمخزن (${prod.qty} ${isKg ? 'كجم' : 'قطع'}) فقط!`);
+            return;
+        }
+
+        if (existing) {
+            existing.qty += weightOrQty;
         } else {
-            const itemPrice = Math.round(prod.singleSell * amount);
             cart.push({
-                id: prod.id,
-                name: prod.unitType === 'kg' ? `${prod.name} (${unitText})` : prod.name,
-                price: itemPrice,
-                unitPriceKg: prod.singleSell,
-                unitType: prod.unitType,
-                amount: amount,
-                group: prod.group,
-                qty: 1
+                id: prod.id, name: prod.name, group: prod.group,
+                price: prod.singleSell, costPrice: prod.singleCost,
+                unitType: prod.unitType || 'piece',
+                type: isKg ? 'kg' : 'single',
+                qty: weightOrQty
             });
         }
-        updateCartBar();
+        updateCartFloatUI();
     }
 
-    function changeQty(index, delta) {
+    function updateCartFloatUI() {
+        const dock = document.getElementById("cart-float-bar");
+        const countText = document.getElementById("cart-count");
+        const totalText = document.getElementById("cart-total");
+
+        let totalItems = 0; let totalPrice = 0;
+        cart.forEach(c => {
+            totalItems += c.type === 'kg' ? 1 : c.qty;
+            totalPrice += c.qty * c.price;
+        });
+
+        if (cart.length > 0) {
+            dock.style.display = "flex";
+            countText.innerHTML = `<span class="star-badge-3d">💨</span> ${cart.length} مواد بالسلة`;
+            totalText.innerText = Math.round(totalPrice).toLocaleString() + " د.ع";
+        } else {
+            dock.style.display = "none";
+        }
+    }
+
+    function openCheckoutModal() {
         playBeepSound();
-        const item = cart[index];
-        item.qty += delta;
-        if (item.qty <= 0) {
-            cart.splice(index, 1);
-        }
-        updateCartBar();
+        renderCartItemsModal();
+        document.getElementById("checkout-modal").style.display = "flex";
     }
+    function closeCheckoutModal() { document.getElementById("checkout-modal").style.display = "none"; }
 
-    function removeFromCart(index) {
-        playRemoveSound();
-        cart.splice(index, 1);
-        updateCartBar();
-    }
-
-    function updateCartBar() {
-        const bar = document.getElementById("cart-float-bar");
-        if(cart.length === 0) { 
-            bar.style.display = "none"; 
-            closeCheckoutModal(); 
-            return; 
-        }
-        bar.style.display = "flex";
-        
-        let count = 0, itemsTotal = 0;
-        cart.forEach(c => { count += c.qty; itemsTotal += (c.qty * c.price); });
-        
-        const finalTotal = itemsTotal + DELIVERY_FEE;
-
-        document.getElementById("cart-count").innerHTML = `<span class="star-badge-3d"><i class="fa-solid fa-star"></i></span> ${count} مواد بالسلة`;
-        document.getElementById("cart-total").innerText = `المجموع: ${finalTotal.toLocaleString()} د.ع (شامل التوصيل)`;
-        
-        document.getElementById("summary-items-total").innerText = `${itemsTotal.toLocaleString()} د.ع`;
-        document.getElementById("summary-final-total").innerText = `${finalTotal.toLocaleString()} د.ع`;
-
-        renderCartModalItems();
-    }
-
-    function renderCartModalItems() {
+    function renderCartItemsModal() {
         const container = document.getElementById("cart-items-container");
         container.innerHTML = '';
+        let itemsTotal = 0;
 
         cart.forEach((item, index) => {
+            const isKg = item.unitType === 'kg';
+            const itemSum = item.qty * item.price;
+            itemsTotal += itemSum;
+            const displayLabel = isKg ? (item.qty >= 1 ? `${item.qty} كجم` : `${item.qty*1000} غرام`) : `${item.qty} قطعة`;
+
             container.innerHTML += `
                 <div class="cart-item-row">
-                    <div style="flex: 1;">
-                        <div style="font-size: 13.5px; font-weight: 800;">${escapeHTML(item.name)}</div>
-                        <small style="color: var(--text-secondary);">${(item.price * item.qty).toLocaleString()} د.ع</small>
+                    <div>
+                        <strong style="font-size:13.5px; color:#fff;">${escapeHTML(item.name)} ${isKg ? `(${displayLabel})` : ''}</strong>
+                        <div style="font-size:11.5px; color:var(--accent-gold); font-weight:700;">${Math.round(itemSum).toLocaleString()} د.ع</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <button type="button" class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                        <span style="font-weight: 800; min-width: 18px; text-align: center;">${item.qty}</span>
-                        <button type="button" class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-                        <button type="button" class="delete-btn" onclick="removeFromCart(${index})" title="مسح المادة"><i class="fa-solid fa-trash-can"></i></button>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        ${!isKg ? `
+                        <button class="qty-btn" onclick="updateCartItemQty(${index}, -1)">-</button>
+                        <span style="font-weight:800; font-size:13px; color:#fff;">${item.qty}</span>
+                        <button class="qty-btn" onclick="updateCartItemQty(${index}, 1)">+</button>` : ''}
+                        <button class="delete-btn" onclick="removeCartItem(${index})"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
             `;
         });
+
+        document.getElementById("summary-items-total").innerText = Math.round(itemsTotal).toLocaleString() + " د.ع";
+        document.getElementById("summary-final-total").innerText = Math.round(itemsTotal + 5000).toLocaleString() + " د.ع";
     }
 
-    function openCheckoutModal() { 
+    function updateCartItemQty(index, change) {
         playBeepSound();
-        if(cart.length === 0) return;
-        renderCartModalItems();
-        document.getElementById("checkout-modal").style.display = "flex"; 
+        const item = cart[index];
+        const prod = allProducts.find(p => p.id === item.id);
+        const newQty = item.qty + change;
+
+        if (newQty <= 0) { removeCartItem(index); return; }
+        if (newQty > prod.qty) { alert(`المتوفر بالمخزن (${prod.qty}) فقط!`); return; }
+
+        cart[index].qty = newQty;
+        updateCartFloatUI(); renderCartItemsModal();
     }
-    
-    function closeCheckoutModal() { 
-        document.getElementById("checkout-modal").style.display = "none"; 
+
+    function removeCartItem(index) {
+        playRemoveSound();
+        cart.splice(index, 1);
+        updateCartFloatUI(); renderCartItemsModal();
+        if(cart.length === 0) closeCheckoutModal();
     }
 
     document.getElementById("order-form").addEventListener("submit", function(e) {
         e.preventDefault();
-        if(cart.length === 0) return;
+        if (cart.length === 0) return;
 
         const customerName = document.getElementById("cust-name").value.trim();
         const phone = document.getElementById("cust-phone").value.trim();
@@ -883,27 +848,29 @@
 
         let itemsTotal = 0;
         cart.forEach(c => itemsTotal += (c.qty * c.price));
-        const finalTotal = itemsTotal + DELIVERY_FEE;
+        const deliveryFee = 5000;
+        const totalAmount = itemsTotal + deliveryFee;
 
         const now = new Date();
         const dateStr = now.toLocaleDateString('en-CA') + " " + now.toLocaleTimeString('ar-EG');
 
-        db.collection("onlineOrders").add({
+        const orderData = {
             customerName, phone, address, notes,
             items: cart,
-            itemsTotal,
-            deliveryFee: DELIVERY_FEE,
-            totalAmount: finalTotal,
+            itemsTotal: Math.round(itemsTotal),
+            deliveryFee,
+            totalAmount: Math.round(totalAmount),
             status: "pending",
             date: dateStr,
+            rawDate: now.toLocaleDateString('en-CA'),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
+        };
+
+        db.collection("onlineOrders").add(orderData).then(() => {
             playSuccessSound();
-            alert("✅ تم إرسال طلبك بنجاح! سيتواصل معك الكاشير لتأكيد التوصيل.");
-            cart = [];
-            updateCartBar();
-            closeCheckoutModal();
-            this.reset();
+            alert("تم إرسال طلبك بنجاح! سيتصل بك موظف التوصيل قريباً جداً 🌹");
+            cart = []; updateCartFloatUI(); closeCheckoutModal();
+            document.getElementById("order-form").reset();
         }).catch(err => {
             alert("حدث خطأ أثناء إرسال الطلب: " + err.message);
         });
