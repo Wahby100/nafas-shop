@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر نفَس الإلكتروني | Nafas Shop</title>
+    <title>متجر نفَس الإلكتروني | Nafas Shop (v1.2)</title>
     <!-- خطوط جوجل العالمية -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <!-- أيقونات FontAwesome 6 -->
@@ -42,6 +42,12 @@
                 radial-gradient(at 50% 50%, rgba(147, 51, 234, 0.05) 0px, transparent 60%);
             background-attachment: fixed;
             color: var(--text-primary); margin: 0; padding: 12px; min-height: 100vh;
+        }
+
+        .version-badge {
+            background: rgba(243, 156, 18, 0.15); border: 1px solid var(--accent-gold);
+            color: var(--accent-gold); font-size: 11px; font-weight: 800;
+            padding: 3px 10px; border-radius: 12px; display: inline-block; margin-right: 6px;
         }
 
         /* Keyframe Animations */
@@ -305,7 +311,7 @@
     <!-- Hero Header -->
     <div class="hero-header">
         <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-        <h1>متجر نفَس الإلكتروني</h1>
+        <h1>متجر نفَس الإلكتروني <span class="version-badge">v1.2</span></h1>
         
         <div class="hero-badges-row">
             <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لباب البيت</span>
@@ -337,7 +343,7 @@
 
     <!-- Developer Footer -->
     <div class="developer-footer">
-        <div>Designed & Developed by <strong>Wahby</strong></div>
+        <div>Designed & Developed  by <strong>Wahby</strong> | <span class="version-badge">إصدار v1.2</span></div>
         <div style="margin-top: 8px;">
             <a href="mailto:wahby.razaq100@gmail.com"><i class="fa-solid fa-envelope"></i> wahby.razaq100@gmail.com</a> | 
             <a href="https://wa.me/9647811880089" target="_blank"><i class="fa-solid fa-phone"></i> 07811880089</a>
@@ -376,7 +382,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
