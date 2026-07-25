@@ -33,32 +33,7 @@
             --warning: #f59e0b;
             --border-glass: rgba(255, 255, 255, 0.08);
             --border-glow: rgba(243, 156, 18, 0.55);
-        /* ☀️ Light / Day Mode Theme Tokens for Shop */
-        body.light-mode {
-            --bg-dark: #f8fafc;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --bg-card-hover: rgba(255, 255, 255, 1);
-            --accent-gold: #d97706;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-glass: rgba(0, 0, 0, 0.08);
-            background-color: #f8fafc;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(217, 119, 6, 0.08) 0px, transparent 45%),
-                radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.06) 0px, transparent 50%);
-            color: #0f172a;
         }
-
-        body.light-mode .hero-header { background: rgba(255, 255, 255, 0.9); border-color: rgba(217, 119, 6, 0.3); }
-        body.light-mode .product-card h3 { color: #0f172a; }
-        body.light-mode .price-box { background: rgba(0, 0, 0, 0.04); border-color: rgba(0, 0, 0, 0.08); }
-        body.light-mode input, body.light-mode textarea { background: rgba(255, 255, 255, 0.9); color: #0f172a; border-color: rgba(0, 0, 0, 0.15); }
-        body.light-mode .mobile-bottom-dock { background: rgba(255, 255, 255, 0.95); border-color: #d97706; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); }
-        body.light-mode .dock-item { color: #475569; }
-        body.light-mode .dock-item.active, body.light-mode .dock-item:hover { color: #0f172a; background: rgba(217, 119, 6, 0.15); }
-        body.light-mode .lightbox-modal-card, body.light-mode .weight-modal-card { background: rgba(255, 255, 255, 0.95); color: #0f172a; }
-        body.light-mode .scale-display { background: rgba(0, 0, 0, 0.05); }
-        body.light-mode .cat-pill { background: rgba(255, 255, 255, 0.8); color: #475569; border-color: rgba(0, 0, 0, 0.1); }
 
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
         
@@ -401,7 +376,7 @@
         <div class="smoke-ticker-wrapper">
             <div class="smoke-ticker-text">
                 <i class="fa-solid fa-cloud-meatball"></i>
-                <span class="shimmer-text">متجر نفَس للسكائر والأراجيل والمعسل الفاخر | توصيل سريع لباب البيت داخل بغداد 🛵💨</span>
+                <span class="shimmer-text">متجر نفَس للسكائر والأراجيل والمعسل | توصيل سريع لباب البيت داخل بغداد 🛵💨</span>
                 <i class="fa-solid fa-fire-flame-curved"></i>
             </div>
         </div>
@@ -409,13 +384,12 @@
         <!-- Hero Header -->
         <div class="hero-header">
             <img src="logo.png" alt="Nafas Logo" class="shop-logo" onerror="this.style.display='none';">
-            <h1 class="shimmer-text">متجر نفَس الملكي للسكائر والأراجيل <span class="version-badge">v2.0</span></h1>
+            <h1 class="shimmer-text">متجر نفَس للسكائر والأراجيل <span class="version-badge">v2.0</span></h1>
             
             <div class="hero-badges-row">
                 <span class="hero-badge"><i class="fa-solid fa-truck-fast"></i> توصيل سريع للبيت</span>
                 <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> معسل وأراجيل أصلي 100%</span>
                 <span class="hero-badge"><div class="star-badge-3d">💨</div> بيع مفرد بالأوزان والجملة</span>
-                <button type="button" id="shop-theme-btn" class="hero-badge" style="cursor:pointer; background:rgba(243,156,18,0.2); border:1px solid var(--accent-gold); font-weight:800; color:#fff;" onclick="toggleShopTheme()"><i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span>الوضع النهاري (Light Mode)</span></button>
             </div>
 
             <div class="header-info-box">
@@ -534,7 +508,7 @@
             </div>
 
             <form id="order-form">
-                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل الاسم الكامل"></div>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="cust-name" required placeholder="أدخل اسمك الكريم"></div>
                 <div class="form-group"><label>رقم الهاتف:</label><input type="tel" id="cust-phone" required placeholder="077XXXXXXXX"></div>
                 <div class="form-group"><label>العنوان بالتفصيل:</label><input type="text" id="cust-address" required placeholder="المنطقة، أقرب نقطة دالة..."></div>
                 <div class="form-group"><label>ملاحظات إضافية (اختياري):</label><textarea id="cust-notes" rows="2" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea></div>
@@ -563,31 +537,10 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
-    /* ============================================================
-       Dark Mode & Light Day Mode Theme Engine for Shop
-       ============================================================ */
-    function toggleShopTheme() {
-        const isLight = document.body.classList.toggle('light-mode');
-        const btn = document.getElementById('shop-theme-btn');
-        if (isLight) {
-            localStorage.setItem('nafas_shop_theme', 'light');
-            if (btn) btn.innerHTML = `<i class="fa-solid fa-moon" style="color:#a855f7;"></i> <span>الوضع الليلي (Dark Mode)</span>`;
-        } else {
-            localStorage.setItem('nafas_shop_theme', 'dark');
-            if (btn) btn.innerHTML = `<i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span>الوضع النهاري (Light Mode)</span>`;
-        }
-    }
-
-    (function loadSavedShopTheme() {
-        const savedTheme = localStorage.getItem('nafas_shop_theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-mode');
-            window.addEventListener('DOMContentLoaded', () => {
-                const btn = document.getElementById('shop-theme-btn');
-                if (btn) btn.innerHTML = `<i class="fa-solid fa-moon" style="color:#a855f7;"></i> <span>الوضع الليلي (Dark Mode)</span>`;
-            });
-        }
-    })();
+    window.addEventListener("mousemove", (e) => {
+        mouseTrail.push({ x: e.clientX, y: e.clientY, alpha: 0.65, size: Math.random() * 8 + 3 });
+        if(mouseTrail.length > 25) mouseTrail.shift();
+    });
 
     window.addEventListener("touchmove", (e) => {
         if(e.touches.length > 0) {
